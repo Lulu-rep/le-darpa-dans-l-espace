@@ -15,6 +15,7 @@ typedef struct ASTRE{
     POSITION instant;
     double vitesse;
     float rayon;
+    double distance_ref;
     COULEUR couleur;
 }ASTRE;
 
@@ -31,3 +32,6 @@ void define_struct(ASTRE* planete);
 POSITION define_position(POSITION pos);
 
 COULEUR define_couleur(COULEUR col);
+
+void pivot_planete(ASTRE* planete);
+

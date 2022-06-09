@@ -81,3 +81,17 @@ COULEUR define_couleur(COULEUR col)
     scanf("%d",&col.b);
     return col;
 }
+
+
+void pivot_planete(ASTRE* planete)
+{
+    double alpha;
+    alpha = acos((planete->instant.x/planete->distance_ref)*M_PI/180);
+    printf("alpha1: %lf",alpha);
+    alpha +=0.0174533;
+    printf("alpha2: %lf",alpha);
+    planete->instant.x = cos(alpha)*planete->distance_ref;
+    planete->instant.y = sin(alpha)*planete->distance_ref;
+}
+
+
