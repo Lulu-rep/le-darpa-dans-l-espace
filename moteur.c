@@ -134,6 +134,9 @@ void init_system(ASTRE** tab)
     ASTRE* saturne = malloc(sizeof(ASTRE));
     ASTRE* uranus = malloc(sizeof(ASTRE));
     ASTRE* neptune = malloc(sizeof(ASTRE));
+    ASTRE* lune = malloc(sizeof(ASTRE));
+    ASTRE* soleil = malloc(sizeof(ASTRE));
+
 
     
     initstruct(mercure);
@@ -144,6 +147,17 @@ void init_system(ASTRE** tab)
     initstruct(saturne);
     initstruct(uranus);
     initstruct(neptune);
+    initstruct(lune);
+    initstruct(soleil);
+
+    soleil->nom = "Solei";
+    soleil->distance_ref = 0;
+    soleil->rayon = 700000;
+    soleil->vitesse = 0;
+    soleil->centre_gravitation = soleil->instant;//pas sur de ça on verra bien.
+    soleil->couleur.r = 210;
+    soleil->couleur.v = 89;
+    soleil->couleur.b = 5;
     
     
     //strcpy(mercure->nom,"Mercure");
@@ -151,6 +165,7 @@ void init_system(ASTRE** tab)
     mercure->distance_ref = 58;
     mercure->rayon = 2400;
     mercure->vitesse = 175936;
+    mercure->centre_gravitation = soleil->instant;
     mercure->couleur.r = 171;
     mercure->couleur.v = 107;
     mercure->couleur.b = 0;
@@ -160,6 +175,7 @@ void init_system(ASTRE** tab)
     venus->distance_ref = 108;
     venus->rayon = 600;
     venus->vitesse = 126062;
+    venus->centre_gravitation = soleil->instant;
     venus->couleur.r = 243;
     venus->couleur.v = 186;
     venus->couleur.b = 24;
@@ -170,6 +186,7 @@ void init_system(ASTRE** tab)
     terre->distance_ref = 150;
     terre->rayon = 6400;
     terre->vitesse = 107243;
+    terre->centre_gravitation = soleil->instant;
     terre->couleur.r = 22;
     terre->couleur.v = 166;
     terre->couleur.b = 215;
@@ -179,6 +196,7 @@ void init_system(ASTRE** tab)
     mars->distance_ref = 227;
     mars->rayon = 3200;
     mars->vitesse = 87226;
+    mars->centre_gravitation = soleil->instant;
     mars->couleur.r = 225;
     mars->couleur.v = 49;
     mars->couleur.b = 21;
@@ -188,6 +206,7 @@ void init_system(ASTRE** tab)
     jupiter->distance_ref = 778;
     jupiter->rayon = 71000;
     jupiter->vitesse = 47196;
+    jupiter->centre_gravitation = soleil->instant;
     jupiter->couleur.r = 232;
     jupiter->couleur.v = 205;
     jupiter->couleur.b = 137;
@@ -197,6 +216,7 @@ void init_system(ASTRE** tab)
     saturne->distance_ref = 1457;
     saturne->rayon = 60000;
     saturne->vitesse = 34962;
+    saturne->centre_gravitation = soleil->instant;
     saturne->couleur.r = 169;
     saturne->couleur.v = 154;
     saturne->couleur.b = 114;
@@ -205,6 +225,7 @@ void init_system(ASTRE** tab)
     uranus->distance_ref = 2870;
     uranus->rayon = 25650;
     uranus->vitesse = 24459;
+    uranus->centre_gravitation = soleil->instant;
     uranus->couleur.r = 32;
     uranus->couleur.v = 233;
     uranus->couleur.b = 217;
@@ -214,15 +235,32 @@ void init_system(ASTRE** tab)
     neptune->distance_ref = 4500;
     neptune->rayon = 25000;
     neptune->vitesse = 19566;
+    neptune->centre_gravitation = soleil->instant;
     neptune->couleur.r = 50;
     neptune->couleur.v = 50;
     neptune->couleur.b = 250;
 
+    lune->nom = "Lune";
+    lune->distance_ref = 0.3844;
+    lune->rayon = 1737;
+    lune->vitesse = 3680;
+    lune->centre_gravitation = terre->instant;
+    lune->couleur.r = 118;
+    lune->couleur.v = 132;
+    lune->couleur.b = 125;
+
+
 
     
+
+
+
+
+    ajout_tab(tab,soleil);
     ajout_tab(tab,mercure);
     ajout_tab(tab,venus);
     ajout_tab(tab,terre);
+    ajout_tab(tab,lune);
     ajout_tab(tab,mars);
     ajout_tab(tab,jupiter);
     ajout_tab(tab,saturne);
@@ -232,6 +270,7 @@ void init_system(ASTRE** tab)
 
 
 }
+
 
 void ajout_tab(ASTRE **tab, ASTRE *planete)
 {
