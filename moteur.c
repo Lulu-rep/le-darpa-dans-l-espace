@@ -1,8 +1,9 @@
 #include <stdlib.h> // Pour pouvoir utiliser exit()
-#include <stdio.h>  // Pour pouvoir utiliser printf()
-#include <math.h>   // Pour pouvoir utiliser sin() et cos()
+#include <stdio.h> // Pour pouvoir utiliser printf()
+#include <math.h> // Pour pouvoir utiliser sin() et cos()
 #include <time.h>
 #include "moteur.h"
+#include <string.h>
 
 COULEUR inistruct_couleur(COULEUR col)
 {
@@ -20,7 +21,7 @@ POSITION inistruct_pos(POSITION pos)
     return pos;
 }
 
-void initstruct(ASTRE *planete)
+void initstruct(ASTRE* planete)
 {
     POSITION inst;
     POSITION gravitation;
@@ -32,35 +33,36 @@ void initstruct(ASTRE *planete)
     planete->instant = inst;
     planete->rayon = 0;
     planete->vitesse = 0;
-    planete->couleur = col;
-    planete->nom = malloc(sizeof(char) * 10);
     planete->distance_ref = 0;
+    planete->couleur = col;
+    planete->nom = malloc(sizeof(char)*30);
 }
 
-void affich_struct(ASTRE *planete)
+void affich_struct(ASTRE* planete)
 {
-    printf("nom : %s \n", planete->nom);
-    printf("rayon de la planete: %f \n", planete->rayon);
-    printf("centre gravitation: (x=%f;y=%f) \n", planete->centre_gravitation.x, planete->centre_gravitation.y);
-    printf("position instant: (x=%f,y=%f) \n", planete->instant.x, planete->instant.y);
-    printf("vitesse: %lf \n", planete->vitesse);
-    printf("couleur: r=%d, v=%d, b=%d \n", planete->couleur.r, planete->couleur.v, planete->couleur.b);
+    puts("------------------------------------------------");
+    printf("nom : %s \n",planete->nom);
+    printf("rayon de la planete: %f \n",planete->rayon);
+    printf("centre gravitation: (x=%f;y=%f) \n",planete->centre_gravitation.x,planete->centre_gravitation.y);
+    printf("position instant: (x=%f,y=%f) \n",planete->instant.x,planete->instant.y);
+    printf("vitesse: %lf \n",planete->vitesse);
+    printf("distance au ref: %lf \n",planete->distance_ref);
+    printf("couleur: r=%d, v=%d, b=%d \n",planete->couleur.r,planete->couleur.v,planete->couleur.b);
+    puts("------------------------------------------------");
 }
 
-void define_struct(ASTRE *planete)
+void define_struct(ASTRE* planete)
 {
     puts("nom de la planete ?");
-    scanf("%s", planete->nom);
+    scanf("%s",planete->nom);
     puts("rayon ?");
-    scanf("%f", &planete->rayon);
+    scanf("%f",&planete->rayon);
     puts("gravitation");
-    planete->centre_gravitation = define_position(planete->centre_gravitation);
+    planete->centre_gravitation= define_position(planete->centre_gravitation);
     puts("instant t");
     planete->instant = define_position(planete->instant);
     puts("vitesse ?");
-    scanf("%lf", &planete->vitesse);
-    puts("distance du centre de gravitation ?");
-    scanf("%lf", &planete->distance_ref);
+    scanf("%lf",&planete->vitesse);
     puts("couleur ?");
     planete->couleur = define_couleur(planete->couleur);
 }
@@ -68,22 +70,23 @@ void define_struct(ASTRE *planete)
 POSITION define_position(POSITION pos)
 {
     puts("x ?");
-    scanf("%f", &pos.x);
+    scanf("%f",&pos.x);
     puts("y ?");
-    scanf("%f", &pos.y);
+    scanf("%f",&pos.y);
     return pos;
 }
 
 COULEUR define_couleur(COULEUR col)
 {
     puts("r");
-    scanf("%d", &col.r);
+    scanf("%d",&col.r);
     puts("v");
-    scanf("%d", &col.v);
+    scanf("%d",&col.v);
     puts("b");
-    scanf("%d", &col.b);
+    scanf("%d",&col.b);
     return col;
 }
+
 
 int pivot_planete(ASTRE *planete, int cadran)
 {
@@ -121,6 +124,15 @@ int pivot_planete(ASTRE *planete, int cadran)
     planete->instant.x = x + planete->centre_gravitation.x;
     planete->instant.y = y + planete->centre_gravitation.y;
     return cadran;
+}
+
+
+
+
+ASTRE** init_tab()
+{
+    ASTRE** system = malloc(sizeof(ASTRE)*15);
+    return system;
 }
 
 
@@ -272,25 +284,27 @@ void init_system(ASTRE** tab)
 }
 
 
-void ajout_tab(ASTRE **tab, ASTRE *planete)
+void ajout_tab(ASTRE** tab, ASTRE* planete)
 {
-    for (int i = 0; i < 50; i++)
+    for(int i =0;i<50;i++)
     {
-        if (!tab[i])
+        if(!tab[i])
         {
-            tab[i] = planete;
+            tab[i]=planete;
             break;
         }
     }
 }
 
-void affich_tab(ASTRE **tab)
+
+void affich_tab(ASTRE** tab)
 {
-    for (int i = 0; i < sizeof(tab); i++)
+    for(int i =0; i<sizeof(tab); i++)
     {
         affich_struct(tab[i]);
     }
 }
+
 
 void free_tab(ASTRE** tab)
 {
