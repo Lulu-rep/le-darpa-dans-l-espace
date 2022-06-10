@@ -35,3 +35,10 @@ COULEUR define_couleur(COULEUR col);
 
 void pivot_planete(ASTRE* planete);
 
+void init_system(ASTRE** tab);
+
+ASTRE** init_tab();
+
+void ajout_tab(ASTRE**tab, ASTRE* planete);
+
+void affich_tab(ASTRE** tab);

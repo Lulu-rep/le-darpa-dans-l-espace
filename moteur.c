@@ -95,3 +95,120 @@ void pivot_planete(ASTRE* planete)
 }
 
 
+
+ASTRE** init_tab()
+{
+    ASTRE** system = malloc(sizeof(ASTRE)*15);
+    return system;
+}
+
+
+void init_system(ASTRE** tab)
+{
+    ASTRE mer,ven,ter,mar,jup,sat,ura,nep;
+    ASTRE* mercure = &mer;
+    ASTRE* venus = &ven;
+    ASTRE* terre = &ter;
+    ASTRE* mars = &mar;
+    ASTRE* jupiter = &jup;
+    ASTRE* saturne = &sat;
+    ASTRE* uranus = &ura;
+    ASTRE* neptune = &nep;
+
+    
+    initstruct(mercure);
+    initstruct(venus);
+    initstruct(terre);
+    initstruct(mars);
+    initstruct(jupiter);
+    initstruct(saturne);
+    initstruct(uranus);
+    initstruct(neptune);
+    
+    
+
+    mercure->nom = "Mercure";
+    mercure->distance_ref = 58;
+    mercure->rayon = 2400;
+    mercure->vitesse = 175936;
+   
+
+    venus->nom = "Venus";
+    venus->distance_ref = 108;
+    venus->rayon = 600;
+    venus->vitesse = 126062;
+
+    
+
+    terre->nom = "Terre";
+    terre->distance_ref = 150;
+    terre->rayon = 6400;
+    terre->vitesse = 107243;
+
+    
+    mars->nom = "Mars";
+    mars->distance_ref = 227;
+    mars->rayon = 3200;
+    mars->vitesse = 87226;
+
+    
+    jupiter->nom = "Jupiter";
+    jupiter->distance_ref = 778;
+    jupiter->rayon = 71000;
+    jupiter->vitesse = 47196;
+
+    
+    saturne->nom = "Saturne";
+    saturne->distance_ref = 1457;
+    saturne->rayon = 60000;
+    saturne->vitesse = 34962;
+
+    
+    uranus->nom = "Uranus";
+    uranus->distance_ref = 2870;
+    uranus->rayon = 25650;
+    uranus->vitesse = 24459;
+
+    
+    neptune->nom = "Neptune";
+    neptune->distance_ref = 4500;
+    neptune->rayon = 25000;
+    neptune->vitesse = 19566;
+
+
+    
+    ajout_tab(tab,mercure);
+    ajout_tab(tab,venus);
+    ajout_tab(tab,terre);
+    ajout_tab(tab,mars);
+    ajout_tab(tab,jupiter);
+    ajout_tab(tab,saturne);
+    ajout_tab(tab,uranus);
+    ajout_tab(tab,neptune);
+    
+
+
+}
+
+
+void ajout_tab(ASTRE** tab, ASTRE* planete)
+{
+    for(int i =0;i<15;i++)
+    {
+        if(!tab[i])
+        {
+            tab[i]=planete;
+            break;
+        }
+    }
+}
+
+
+void affich_tab(ASTRE** tab)
+{
+    for(int i =0; i<7; i++)
+    {
+        affich_struct(tab[i]);
+    }
+}
+
