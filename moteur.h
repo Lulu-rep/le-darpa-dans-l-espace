@@ -42,3 +42,5 @@ ASTRE** init_tab();
 void ajout_tab(ASTRE**tab, ASTRE* planete);
 
 void affich_tab(ASTRE** tab);
+
+void free_tab(ASTRE** tab);
