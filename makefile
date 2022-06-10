@@ -13,20 +13,19 @@ exempleTortue: exempleTortue.o libisentlib.a
 main.o: main.c GFXLib/GfxLib.h GFXLib/BmpLib.h GFXLib/ESLib.h
 	gcc -Wall -c main.c
 
-affichage.o: affichage.c GFXLib/GfxLib.h GFXLib/BmpLib.h GFXLib/ESLib.h
+affichage.o: affichage.c GFXLib/GfxLib.h GFXLib/BmpLib.h GFXLib/ESLib.h affichage.h
 	gcc -Wall -c affichage.c
 
-menu.o: menu.c
+menu.o: menu.c menu.h
 	gcc -Wall -c menu.c
 
-moteur.o: moteur.c
+moteur.o: moteur.c moteur.h
 	gcc -Wall -c moteur.c
 
-sauvegarde.o: sauvegarde.c 
+sauvegarde.o: sauvegarde.c sauvegarde.h
 	gcc -Wall -c sauvegarde.c 
 	
-exempleTortue.o: exempleTortue.c GfxLib.h BmpLib.h ESLib.h TortueLib.h
-	gcc -Wall -c exempleTortue.c
+
 
 
 libisentlib.a: BmpLib.o ErreurLib.o ESLib.o GfxLib.o OutilsLib.o SocketLib.o ThreadLib.o TortueLib.o VectorLib.o WavLib.o

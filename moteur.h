@@ -33,7 +33,7 @@ POSITION define_position(POSITION pos);
 
 COULEUR define_couleur(COULEUR col);
 
-void pivot_planete(ASTRE* planete);
+int pivot_planete(ASTRE* planete,int);
 
 void init_system(ASTRE** tab);
 
