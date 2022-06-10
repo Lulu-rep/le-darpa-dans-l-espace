@@ -151,12 +151,18 @@ void init_system(ASTRE** tab)
     mercure->distance_ref = 58;
     mercure->rayon = 2400;
     mercure->vitesse = 175936;
+    mercure->couleur.r = 171;
+    mercure->couleur.v = 107;
+    mercure->couleur.b = 0;
    
 
     venus->nom = "Venus";
     venus->distance_ref = 108;
     venus->rayon = 600;
     venus->vitesse = 126062;
+    venus->couleur.r = 243;
+    venus->couleur.v = 186;
+    venus->couleur.b = 24;
 
     
 
@@ -164,36 +170,53 @@ void init_system(ASTRE** tab)
     terre->distance_ref = 150;
     terre->rayon = 6400;
     terre->vitesse = 107243;
+    terre->couleur.r = 22;
+    terre->couleur.v = 166;
+    terre->couleur.b = 215;
 
     
     mars->nom = "Mars";
     mars->distance_ref = 227;
     mars->rayon = 3200;
     mars->vitesse = 87226;
+    mars->couleur.r = 225;
+    mars->couleur.v = 49;
+    mars->couleur.b = 21;
 
     
     jupiter->nom = "Jupiter";
     jupiter->distance_ref = 778;
     jupiter->rayon = 71000;
     jupiter->vitesse = 47196;
+    jupiter->couleur.r = 232;
+    jupiter->couleur.v = 205;
+    jupiter->couleur.b = 137;
 
     
     saturne->nom = "Saturne";
     saturne->distance_ref = 1457;
     saturne->rayon = 60000;
     saturne->vitesse = 34962;
-
+    saturne->couleur.r = 169;
+    saturne->couleur.v = 154;
+    saturne->couleur.b = 114;
     
     uranus->nom = "Uranus";
     uranus->distance_ref = 2870;
     uranus->rayon = 25650;
     uranus->vitesse = 24459;
+    uranus->couleur.r = 32;
+    uranus->couleur.v = 233;
+    uranus->couleur.b = 217;
 
     
     neptune->nom = "Neptune";
     neptune->distance_ref = 4500;
     neptune->rayon = 25000;
     neptune->vitesse = 19566;
+    neptune->couleur.r = 50;
+    neptune->couleur.v = 50;
+    neptune->couleur.b = 250;
 
 
     
