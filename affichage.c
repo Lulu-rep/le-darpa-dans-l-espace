@@ -6,10 +6,7 @@
 #include "GFXLib/BmpLib.h" // Cet include permet de manipuler des fichiers BMP
 #include "GFXLib/ESLib.h"  // Pour utiliser valeurAleatoire()
 #include "affichage.h"
-ASTRE soleil;
-ASTRE *Psoleil = &soleil;
-ASTRE terre;
-ASTRE *Pterre = &terre;
+ASTRE** systeme;
 /* Fonction de trace de cercle */
 void cercle(float centreX, float centreY, float rayon)
 {
@@ -35,14 +32,8 @@ void gestionEvenement(EvenementGfx evenement)
 	switch (evenement)
 	{
 	case Initialisation:
-		initstruct(Psoleil);
-		define_struct(Psoleil);
-		ASTRE** systeme =init_tab();
+		systeme =init_tab();
 		init_system(systeme);
-		/*affich_tab(systeme);*/
-		initstruct(Pterre);
-		define_struct(Pterre);
-
 		/* Le message "Initialisation" est envoye une seule fois, au debut du
 		programme : il permet de fixer "image" a la valeur qu'il devra conserver
 		jusqu'a la fin du programme : soit "image" reste a NULL si l'image n'a
@@ -51,7 +42,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// Configure le systeme pour generer un message Temporisation
 		// toutes les 20 millisecondes
-		demandeTemporisation(1000);
+		demandeTemporisation(20);
 		break;
 
 	case Temporisation:
@@ -68,9 +59,9 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
-		affiche_astre(Psoleil);
-		cadran = pivot_planete(Pterre,cadran);
-		affiche_astre(Pterre);
+		affiche_astre(systeme[0]);
+		cadran = pivot_planete(systeme[1],cadran);
+		affiche_astre(systeme[1]);
 		break;
 	case Clavier:
 		printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
