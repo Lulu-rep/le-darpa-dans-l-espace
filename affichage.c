@@ -29,6 +29,8 @@ void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static int cadran=0;
+	static int cadran_venus=0;
+	static int cadran_terre=0;
 	switch (evenement)
 	{
 	case Initialisation:
@@ -60,8 +62,16 @@ void gestionEvenement(EvenementGfx evenement)
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
 		affiche_astre(systeme[0]);
-		cadran = pivot_planete(systeme[1],cadran);
+		cadran_venus=pivot_planete(systeme[2],cadran_venus);
+		cadran_terre=pivot_planete(systeme[1],cadran_terre);
+		cadran=pivot_planete(systeme[3],cadran);
+		affiche_astre(systeme[2]);
 		affiche_astre(systeme[1]);
+		affiche_astre(systeme[3]);
+		/*for(int i=0;i<9;i++){
+			cadran=pivot_planete(systeme[i],cadran);
+			affiche_astre(systeme[i]);
+		}*/
 		break;
 	case Clavier:
 		printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
@@ -71,6 +81,7 @@ void gestionEvenement(EvenementGfx evenement)
 		case 'Q': /* Pour sortir quelque peu proprement du programme */
 		case 'q': /* On libere la structure image,
 			 c'est plus propre, meme si on va sortir du programme juste apres */
+			free_tab(systeme);
 			termineBoucleEvenements();
 			break;
 
