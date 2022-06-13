@@ -193,6 +193,8 @@ void init_system(ASTRE** tab)
     venus->rayon = 60;
     venus->vitesse = 126062;
     venus->centre_gravitation = soleil->instant;
+    venus->instant.x=venus->centre_gravitation.x+venus->distance_ref;
+    venus->instant.y=venus->centre_gravitation.y+venus->distance_ref;
     venus->couleur.r = 243;
     venus->couleur.v = 186;
     venus->couleur.b = 24;
@@ -204,6 +206,8 @@ void init_system(ASTRE** tab)
     terre->rayon = 64;
     terre->vitesse = 107243;
     terre->centre_gravitation = soleil->instant;
+    terre->instant.x=terre->centre_gravitation.x+terre->distance_ref;
+    terre->instant.y=terre->centre_gravitation.y+terre->distance_ref;
     terre->couleur.r = 22;
     terre->couleur.v = 166;
     terre->couleur.b = 215;
@@ -214,6 +218,8 @@ void init_system(ASTRE** tab)
     mars->rayon = 32;
     mars->vitesse = 87226;
     mars->centre_gravitation = soleil->instant;
+    mars->instant.x=mars->centre_gravitation.x+mars->distance_ref;
+    mars->instant.y=mars->centre_gravitation.y+mars->distance_ref;
     mars->couleur.r = 225;
     mars->couleur.v = 49;
     mars->couleur.b = 21;
@@ -224,6 +230,8 @@ void init_system(ASTRE** tab)
     jupiter->rayon = 710;
     jupiter->vitesse = 47196;
     jupiter->centre_gravitation = soleil->instant;
+    jupiter->instant.x=jupiter->centre_gravitation.x+jupiter->distance_ref;
+    jupiter->instant.y=jupiter->centre_gravitation.y+jupiter->distance_ref;
     jupiter->couleur.r = 232;
     jupiter->couleur.v = 205;
     jupiter->couleur.b = 137;
@@ -234,6 +242,8 @@ void init_system(ASTRE** tab)
     saturne->rayon = 600;
     saturne->vitesse = 34962;
     saturne->centre_gravitation = soleil->instant;
+    saturne->instant.x=saturne->centre_gravitation.x+saturne->distance_ref;
+    saturne->instant.y=saturne->centre_gravitation.y+saturne->distance_ref;
     saturne->couleur.r = 169;
     saturne->couleur.v = 154;
     saturne->couleur.b = 114;
@@ -243,6 +253,8 @@ void init_system(ASTRE** tab)
     uranus->rayon = 256.5;
     uranus->vitesse = 24459;
     uranus->centre_gravitation = soleil->instant;
+    uranus->instant.x=uranus->centre_gravitation.x+uranus->distance_ref;
+    uranus->instant.y=uranus->centre_gravitation.y+uranus->distance_ref;
     uranus->couleur.r = 32;
     uranus->couleur.v = 233;
     uranus->couleur.b = 217;
@@ -253,6 +265,8 @@ void init_system(ASTRE** tab)
     neptune->rayon = 250;
     neptune->vitesse = 19566;
     neptune->centre_gravitation = soleil->instant;
+    neptune->instant.x=neptune->centre_gravitation.x+neptune->distance_ref;
+    neptune->instant.y=neptune->centre_gravitation.y+neptune->distance_ref;
     neptune->couleur.r = 50;
     neptune->couleur.v = 50;
     neptune->couleur.b = 250;
@@ -262,6 +276,8 @@ void init_system(ASTRE** tab)
     lune->rayon = 1737;
     lune->vitesse = 3680;
     lune->centre_gravitation = terre->instant;
+    lune->instant.y=lune->centre_gravitation.y+lune->distance_ref;
+    lune->instant.x=lune->centre_gravitation.x+lune->distance_ref;
     lune->couleur.r = 118;
     lune->couleur.v = 132;
     lune->couleur.b = 125;
