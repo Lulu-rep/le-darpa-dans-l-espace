@@ -24,6 +24,61 @@ void cercle(float centreX, float centreY, float rayon)
 		// On trace le secteur a l'aide d'un triangle => approximation d'un cercle
 	}
 }
+
+//bouton menu:
+
+void bouton_1()
+{
+	couleurCourante(255,255,255);
+	rectangle(largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/3.33,3*largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/2.73);
+	couleurCourante(0,0,0);
+	couleurCourante(0,0,0);
+	//afficheChaine("Simulation_defaut", 30,largeurFenetre()/3,hauteurFenetre()-hauteurFenetre()/2.85);
+	afficheChaine("Simulation_defaut", 30,largeurFenetre()/2-tailleChaine("Simulation_defaut",30)/2,hauteurFenetre()-hauteurFenetre()/2.85);
+
+}
+
+void bouton_2()
+{
+	couleurCourante(255,255,255);
+	rectangle(largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/2.31,3*largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/2);
+	couleurCourante(0,0,0);
+	afficheChaine("Sauvegarder", 30,largeurFenetre()/2-tailleChaine("Sauvegarder",30)/2,hauteurFenetre()-hauteurFenetre()/2.1);
+
+}
+
+
+void bouton_3()
+{
+	couleurCourante(255,255,255);
+	rectangle(largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/1.76,3*largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/1.58);
+	couleurCourante(0,0,0);
+	afficheChaine("Charger", 30,largeurFenetre()/2-tailleChaine("Charger",30)/2,hauteurFenetre()-hauteurFenetre()/1.63);
+
+}
+
+void bouton_4()
+{
+	couleurCourante(255,255,255);
+	rectangle(largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/1.43,3*largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/1.30);
+	couleurCourante(0,0,0);
+	afficheChaine("Reprendre", 30,largeurFenetre()/2-tailleChaine("Reprendre",30)/2, hauteurFenetre()-hauteurFenetre()/1.33);
+
+}
+
+
+void bouton_5()
+{
+	couleurCourante(255,255,255);
+	rectangle(largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/1.2,3*largeurFenetre()/4,hauteurFenetre()-hauteurFenetre()/1.11);
+	couleurCourante(0,0,0);
+	afficheChaine("Quitter", 30,largeurFenetre()/2-tailleChaine("Quitter",30)/2,hauteurFenetre()-hauteurFenetre()/1.14);
+}
+
+
+
+
+
 /* La fonction de gestion des evenements, appelee automatiquement par le systeme
 des qu'une evenement survient */
 void gestionEvenement(EvenementGfx evenement)
@@ -37,6 +92,12 @@ void gestionEvenement(EvenementGfx evenement)
 		init_system(systeme);
 		init_cadran(tab_cadran);
 		affich_tab(systeme);
+		static int esc = 0;
+		static int defaut = 0;
+		static int save=0;
+		static int charger = 0;
+		static int quit=0;
+		static int reprendre=0;
 		/* Le message "Initialisation" est envoye une seule fois, au debut du
 		programme : il permet de fixer "image" a la valeur qu'il devra conserver
 		jusqu'a la fin du programme : soit "image" reste a NULL si l'image n'a
@@ -62,9 +123,19 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
+		if(esc == 0)
 		for(int i=0;i<9;i++){
+			rafraichisFenetre();
 			tab_cadran[i]=pivot_planete(systeme[i],tab_cadran[i]);
 			affiche_astre(systeme[i]);
+		}
+		else{
+			rafraichisFenetre();
+			bouton_1();
+			bouton_2();
+			bouton_3();
+			bouton_4();
+			bouton_5();
 		}
 		demandeTemporisation(vitesse);
 		/*affiche_astre(systeme[0]);
@@ -110,6 +181,16 @@ void gestionEvenement(EvenementGfx evenement)
 
 		case 'M':
 		case 'm':
+		printf("esc %d \n",esc);
+					if(esc == 1)
+					{
+						esc = 0;
+						
+					}
+					else
+					{
+						esc = 1;
+					}
 			// Configure le systeme pour ne plus generer de message Temporisation
 			demandeTemporisation(-1);
 			break;
@@ -132,6 +213,95 @@ void gestionEvenement(EvenementGfx evenement)
 		break;
 
 	case BoutonSouris:
+	if (etatBoutonSouris() == GaucheAppuye)
+		
+			{
+				if(esc == 1)
+				{
+				//rectangle(largeurFenetre()/10,hauteurFenetre()/5,largeurFenetre()/3,hauteurFenetre()/10);
+				if(abscisseSouris() < 3*largeurFenetre()/4 && abscisseSouris() > largeurFenetre()/4 && ordonneeSouris()<hauteurFenetre()-hauteurFenetre()/3.33 && ordonneeSouris()>hauteurFenetre()-hauteurFenetre()/2.73)
+				{
+				
+					printf("defaut %d \n",defaut);
+					if(defaut == 1)
+					{
+						defaut = 0;
+						
+					}
+					else
+					{
+						defaut = 1;
+					}
+				}
+			
+
+				
+				//rectangle(largeurFenetre()/2,hauteurFenetre()/5,largeurFenetre()-largeurFenetre()/4,hauteurFenetre()/10);
+				if(abscisseSouris() < 3*largeurFenetre()/4 && abscisseSouris() > largeurFenetre()/4 && ordonneeSouris()<hauteurFenetre()-hauteurFenetre()/2.31 && ordonneeSouris()>hauteurFenetre()-hauteurFenetre()/2)
+				{
+				
+					printf("save %d \n",save);
+					if(save == 1)
+					{
+						save = 0;
+						
+					}
+					else
+					{
+						save = 1;
+					}
+
+				}
+
+			
+
+				//rectangle(largeurFenetre()/10,0,largeurFenetre()/3,hauteurFenetre()/15);
+				if(abscisseSouris() < 3*largeurFenetre()/4 && abscisseSouris() > largeurFenetre()/4 && ordonneeSouris()<hauteurFenetre()-hauteurFenetre()/2.76 && ordonneeSouris()>hauteurFenetre()-hauteurFenetre()/1.58)
+				{
+				
+					printf("charger %d \n",charger);
+					if(charger == 1)
+					{
+						charger = 0;
+						
+					}
+					else
+					{
+						charger = 1;
+					}
+
+				}
+
+				if(abscisseSouris() < 3*largeurFenetre()/4 && abscisseSouris() > largeurFenetre()/4 && ordonneeSouris()<hauteurFenetre()-hauteurFenetre()/1.43 && ordonneeSouris()>hauteurFenetre()-hauteurFenetre()/1.30)
+				{
+				
+					printf("reprendre %d \n",reprendre);
+					if(reprendre == 1)
+					{
+						reprendre = 0;
+					}
+					else
+					{
+						reprendre = 1;
+					}
+				}
+
+				if(abscisseSouris() < 3*largeurFenetre()/4 && abscisseSouris() > largeurFenetre()/4 && ordonneeSouris()<hauteurFenetre()-hauteurFenetre()/1.2 && ordonneeSouris()>hauteurFenetre()-hauteurFenetre()/1.11)
+				{
+				
+					printf("quit %d \n",quit);
+					if(quit == 1)
+					{
+						quit = 0;
+					}
+					else
+					{
+						quit = 1;
+					}
+				}
+				}
+			}
+			
 		break;
 
 	case Souris: // Si la souris est deplacee
