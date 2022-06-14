@@ -163,9 +163,9 @@ void init_system(ASTRE** tab)
     initstruct(soleil);
 
     soleil->nom = "Soleil";
-    soleil->distance_ref = 0;
+    soleil->distance_ref = 1;
     soleil->rayon = 35;
-    soleil->vitesse = 2;
+    soleil->vitesse = 1;
     soleil->centre_gravitation.x=1920/2;
     soleil->centre_gravitation.y=940/2;
     soleil->instant.x=soleil->centre_gravitation.x;
@@ -179,7 +179,7 @@ void init_system(ASTRE** tab)
     mercure->nom = "Mercure";
     mercure->distance_ref = 58;
     mercure->rayon = 24;
-    mercure->vitesse = 8/*75936*/;
+    mercure->vitesse = 1;
     mercure->centre_gravitation = soleil->instant;
     mercure->instant.x=mercure->centre_gravitation.x+mercure->distance_ref;
     mercure->instant.y=mercure->centre_gravitation.y+mercure->distance_ref;
@@ -191,7 +191,7 @@ void init_system(ASTRE** tab)
     venus->nom = "Venus";
     venus->distance_ref = 108;
     venus->rayon = 30;
-    venus->vitesse = 9/*126062*/;
+    venus->vitesse = 1/*126062*/;
     venus->centre_gravitation = soleil->instant;
     venus->instant.x=venus->centre_gravitation.x+venus->distance_ref;
     venus->instant.y=venus->centre_gravitation.y+venus->distance_ref;
@@ -335,4 +335,11 @@ void free_tab(ASTRE** tab)
     }
     free(tab);
 
+}
+
+void init_cadran(int tab_cadran[]){
+    static int cadran=0;
+    for(int i=0;i<50;i++){
+        tab_cadran[i]=cadran;
+    }
 }

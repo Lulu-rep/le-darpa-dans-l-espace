@@ -7,6 +7,7 @@
 #include "GFXLib/ESLib.h"  // Pour utiliser valeurAleatoire()
 #include "affichage.h"
 ASTRE** systeme;
+static int vitesse=20;
 /* Fonction de trace de cercle */
 void cercle(float centreX, float centreY, float rayon)
 {
@@ -28,14 +29,14 @@ des qu'une evenement survient */
 void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
-	static int cadran=0;
-	static int cadran_venus=0;
-	static int cadran_terre=0;
+	static int tab_cadran[50];
 	switch (evenement)
 	{
 	case Initialisation:
 		systeme =init_tab();
 		init_system(systeme);
+		init_cadran(tab_cadran);
+		affich_tab(systeme);
 		/* Le message "Initialisation" est envoye une seule fois, au debut du
 		programme : il permet de fixer "image" a la valeur qu'il devra conserver
 		jusqu'a la fin du programme : soit "image" reste a NULL si l'image n'a
@@ -61,17 +62,16 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
-		affiche_astre(systeme[0]);
-		cadran_venus=pivot_planete(systeme[2],cadran_venus);
-		cadran_terre=pivot_planete(systeme[1],cadran_terre);
-		cadran=pivot_planete(systeme[3],cadran);
-		affiche_astre(systeme[2]);
-		affiche_astre(systeme[1]);
-		affiche_astre(systeme[3]);
-		/*for(int i=0;i<9;i++){
-			cadran=pivot_planete(systeme[i],cadran);
+		for(int i=0;i<9;i++){
+			tab_cadran[i]=pivot_planete(systeme[i],tab_cadran[i]);
 			affiche_astre(systeme[i]);
-		}*/
+		}
+		demandeTemporisation(vitesse);
+		/*affiche_astre(systeme[0]);
+		tab_cadran[0]=pivot_planete(systeme[2],tab_cadran[0]);
+		affiche_astre(systeme[2]);
+		tab_cadran[1]=pivot_planete(systeme[1],tab_cadran[1]);
+		affiche_astre(systeme[1]);*/
 		break;
 	case Clavier:
 		printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
@@ -120,6 +120,14 @@ void gestionEvenement(EvenementGfx evenement)
 		printf("ASCII %d\n", toucheClavier());
 		switch (toucheClavier())
 		{
+			case ToucheFlecheGauche:
+				if(vitesse>1){
+					vitesse-=1;
+				}
+				break;
+			case ToucheFlecheDroite:
+				vitesse+=1;
+				break;
 		}
 		break;
 
