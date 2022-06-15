@@ -87,7 +87,7 @@ COULEUR define_couleur(COULEUR col)
     return col;
 }
 
-
+/*
 int pivot_planete(ASTRE *planete, int cadran)
 {
     double alpha;
@@ -125,8 +125,33 @@ int pivot_planete(ASTRE *planete, int cadran)
     planete->instant.y = y + planete->centre_gravitation.y;
     return cadran;
 }
+*/
 
+void pivot_planete(ASTRE *planete)
+{
+    double alpha;
+    float x, y;
+    x = planete->instant.x - planete->centre_gravitation.x;
+    y = planete->instant.y - planete->centre_gravitation.y;
+    alpha = acos(x / planete->distance_ref);
 
+    printf("centre gravi : %f \n",planete->centre_gravitation.y);
+    printf("centre gravi2 : %f \n",planete->centre_gravitation.y *M_PI/180);
+    
+    if(planete->instant.y<planete->centre_gravitation.y)
+    {
+        alpha = -alpha;
+    }
+    
+    alpha = (alpha + planete->vitesse*0.01);
+    
+
+    //alpha = (alpha * M_PI) / 180;
+    x = cos(alpha) * planete->distance_ref;
+    y = sin(alpha) * planete->distance_ref;
+    planete->instant.x = x + planete->centre_gravitation.x;
+    planete->instant.y = y + planete->centre_gravitation.y;
+}
 
 
 ASTRE** init_tab()

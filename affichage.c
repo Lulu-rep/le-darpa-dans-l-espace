@@ -140,7 +140,8 @@ void gestionEvenement(EvenementGfx evenement)
 			for (int i = 0; i < 9; i++)
 			{
 				rafraichisFenetre();
-				tab_cadran[i] = pivot_planete(systeme[i], tab_cadran[i]);
+				//tab_cadran[i] = pivot_planete(systeme[i], tab_cadran[i]);
+				pivot_planete(systeme[i]);
 				affiche_astre(systeme[i]);
 			}
 		}
