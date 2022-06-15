@@ -1,9 +1,9 @@
-#define LargeurFenetre 800
-#define HauteurFenetre 600
+#define LargeurFenetre 1280
+#define HauteurFenetre 720
 #include "moteur.h"
 
 // Fonction de trace de cercle
-void cercle(float centreX, float centreY, float rayon);
+void cercle(float centreX, float centreY, float rayon, int pas);
 /* La fonction de gestion des evenements, appelee automatiquement par le systeme
 des qu'une evenement survient */
 void gestionEvenement(EvenementGfx evenement);

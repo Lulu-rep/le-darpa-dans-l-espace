@@ -7,23 +7,27 @@
 #include "GFXLib/ESLib.h"  // Pour utiliser valeurAleatoire()
 #include "affichage.h"
 ASTRE** systeme;
+
+
 static int vitesse=20;
 /* Fonction de trace de cercle */
-void cercle(float centreX, float centreY, float rayon)
+void cercle(float centreX, float centreY, float rayon,int pas)
 {
-	const int Pas = 100; // Nombre de secteurs pour tracer le cercle
-	const double PasAngulaire = 2. * M_PI / Pas;
+	const double PasAngulaire = 2. * M_PI / pas;
 	int index;
 
-	for (index = 0; index < Pas; ++index) // Pour chaque secteur
+	for (index = 0; index < pas; ++index) // Pour chaque secteur
 	{
-		const double angle = 2. * M_PI * index / Pas; // on calcule l'angle de depart du secteur
+		const double angle = 2. * M_PI * index / pas; // on calcule l'angle de depart du secteur
 		triangle(centreX, centreY,
 				 centreX + rayon * cos(angle), centreY + rayon * sin(angle),
 				 centreX + rayon * cos(angle + PasAngulaire), centreY + rayon * sin(angle + PasAngulaire));
 		// On trace le secteur a l'aide d'un triangle => approximation d'un cercle
 	}
 }
+
+static int nb_etoile;
+static int* etoile;
 
 //bouton menu:
 
@@ -76,6 +80,15 @@ void bouton_5()
 }
 
 
+void update_etoile()
+{
+	for(int i=0;i<nb_etoile-1;i+=2)
+	{
+		etoile[i]=rand()%largeurFenetre();
+		etoile[i+1] = rand()%hauteurFenetre();
+	}
+}
+
 
 
 
@@ -88,6 +101,7 @@ void gestionEvenement(EvenementGfx evenement)
 	switch (evenement)
 	{
 	case Initialisation:
+		srand(time(NULL));
 		systeme =init_tab();
 		init_system(systeme);
 		init_cadran(tab_cadran);
@@ -98,6 +112,8 @@ void gestionEvenement(EvenementGfx evenement)
 		static int charger = 0;
 		static int quit=0;
 		static int reprendre=0;
+		nb_etoile = 500 + rand()%4500;
+		etoile = malloc(sizeof(int)*nb_etoile);
 		/* Le message "Initialisation" est envoye une seule fois, au debut du
 		programme : il permet de fixer "image" a la valeur qu'il devra conserver
 		jusqu'a la fin du programme : soit "image" reste a NULL si l'image n'a
@@ -123,12 +139,18 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
+		for (int i=0; i<nb_etoile-1;i+=2)
+		{
+			cercle(etoile[i],etoile[i+1],largeurFenetre()/1024,3);
+		}
+
 		if(esc == 0)
 		for(int i=0;i<9;i++){
 			rafraichisFenetre();
 			tab_cadran[i]=pivot_planete(systeme[i],tab_cadran[i]);
 			affiche_astre(systeme[i]);
 		}
+		
 		else{
 			rafraichisFenetre();
 			bouton_1();
@@ -137,6 +159,8 @@ void gestionEvenement(EvenementGfx evenement)
 			bouton_4();
 			bouton_5();
 		}
+		
+		
 		demandeTemporisation(vitesse);
 		/*affiche_astre(systeme[0]);
 		tab_cadran[0]=pivot_planete(systeme[2],tab_cadran[0]);
@@ -160,13 +184,18 @@ void gestionEvenement(EvenementGfx evenement)
 		case 'f':
 			pleinEcran = !pleinEcran; // Changement de mode plein ecran
 			if (pleinEcran)
+			{
 				modePleinEcran();
+			}
 			else
+			{
 				redimensionneFenetre(LargeurFenetre, HauteurFenetre);
+			}
 			break;
 
 		case 'R':
 		case 'r':
+			update_etoile();
 			// Configure le systeme pour generer un message Temporisation
 			// toutes les 20 millisecondes (rapide)
 			demandeTemporisation(20);
@@ -256,7 +285,7 @@ void gestionEvenement(EvenementGfx evenement)
 			
 
 				//rectangle(largeurFenetre()/10,0,largeurFenetre()/3,hauteurFenetre()/15);
-				if(abscisseSouris() < 3*largeurFenetre()/4 && abscisseSouris() > largeurFenetre()/4 && ordonneeSouris()<hauteurFenetre()-hauteurFenetre()/2.76 && ordonneeSouris()>hauteurFenetre()-hauteurFenetre()/1.58)
+				if(abscisseSouris() < 3*largeurFenetre()/4 && abscisseSouris() > largeurFenetre()/4 && ordonneeSouris()<hauteurFenetre()-hauteurFenetre()/1.76 && ordonneeSouris()>hauteurFenetre()-hauteurFenetre()/1.58)
 				{
 				
 					printf("charger %d \n",charger);
@@ -326,6 +355,6 @@ void affiche_nom(ASTRE *astre)
 void affiche_astre(ASTRE *astre)
 {
 	couleurCourante(astre->couleur.r, astre->couleur.v, astre->couleur.b);
-	cercle(astre->instant.x, astre->instant.y, astre->rayon);
+	cercle(astre->instant.x, astre->instant.y, astre->rayon, 30);
 	affiche_nom(astre);
 }

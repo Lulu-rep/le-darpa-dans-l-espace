@@ -198,7 +198,6 @@ void init_system(ASTRE** tab)
     venus->couleur.r = 243;
     venus->couleur.v = 186;
     venus->couleur.b = 24;
-
     
 
     terre->nom = "Terre";
@@ -270,6 +269,7 @@ void init_system(ASTRE** tab)
     neptune->couleur.r = 50;
     neptune->couleur.v = 50;
     neptune->couleur.b = 250;
+
 
     lune->nom = "Lune";
     lune->distance_ref = 0.3844;
