@@ -129,6 +129,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
+		couleurCourante(255,255,255);
 		for (int i = 0; i < nb_etoile - 1; i += 2)
 		{
 			cercle(etoile[i], etoile[i + 1], largeurFenetre() / 1024, 3);
@@ -137,7 +138,7 @@ void gestionEvenement(EvenementGfx evenement)
 		if (esc == 0)
 		{
 
-			for (int i = 0; i < 9; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				rafraichisFenetre();
 				//tab_cadran[i] = pivot_planete(systeme[i], tab_cadran[i]);
