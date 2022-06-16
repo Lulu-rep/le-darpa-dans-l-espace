@@ -15,5 +15,7 @@ for (fic = 0 ; fic <100000 ; fic++)
   printf("Sauvegarde : %d\n", iteration);
 }
 
+fclose(fic);
+
 return 0;
 }
