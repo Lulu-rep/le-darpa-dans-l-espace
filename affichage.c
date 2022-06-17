@@ -27,7 +27,7 @@ void cercle(float centreX, float centreY, float rayon, int pas)
 
 static int nb_etoile;
 static int *etoile;
-
+static int stop = 0;
 // bouton menu:
 
 void bouton_1()
@@ -129,7 +129,8 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
-		couleurCourante(255,255,255);
+		demandeTemporisation(vitesse);
+		couleurCourante(255, 255, 255);
 		for (int i = 0; i < nb_etoile - 1; i += 2)
 		{
 			cercle(etoile[i], etoile[i + 1], largeurFenetre() / 1024, 3);
@@ -137,12 +138,14 @@ void gestionEvenement(EvenementGfx evenement)
 
 		if (esc == 0)
 		{
-
 			for (int i = 0; i < 10; i++)
 			{
 				rafraichisFenetre();
-				//tab_cadran[i] = pivot_planete(systeme[i], tab_cadran[i]);
-				pivot_planete(systeme[i]);
+				// tab_cadran[i] = pivot_planete(systeme[i], tab_cadran[i]);
+				if (stop == 0)
+				{
+					pivot_planete(systeme[i]);
+				}
 				affiche_astre(systeme[i]);
 			}
 		}
@@ -155,8 +158,7 @@ void gestionEvenement(EvenementGfx evenement)
 			bouton_4();
 			bouton_5();
 		}
-
-		demandeTemporisation(vitesse);
+		printf("Vitesse actuelle : %d \n",vitesse);
 		/*affiche_astre(systeme[0]);
 		tab_cadran[0]=pivot_planete(systeme[2],tab_cadran[0]);
 		affiche_astre(systeme[2]);
@@ -168,8 +170,8 @@ void gestionEvenement(EvenementGfx evenement)
 
 		switch (caractereClavier())
 		{
-		case 'Q': /* Pour sortir quelque peu proprement du programme */
-		case 'q': /* On libere la structure image,
+		case 'C': /* Pour sortir quelque peu proprement du programme */
+		case 'c': /* On libere la structure image,
 			 c'est plus propre, meme si on va sortir du programme juste apres */
 			free_tab(systeme);
 			termineBoucleEvenements();
@@ -190,7 +192,6 @@ void gestionEvenement(EvenementGfx evenement)
 
 		case 'R':
 		case 'r':
-			update_etoile();
 			// Configure le systeme pour generer un message Temporisation
 			// toutes les 20 millisecondes (rapide)
 			demandeTemporisation(20);
@@ -217,6 +218,40 @@ void gestionEvenement(EvenementGfx evenement)
 			// Configure le systeme pour ne plus generer de message Temporisation
 			demandeTemporisation(-1);
 			break;
+		case 'Z':
+		case 'z':
+			for (int i = 0; i < 10; i++)
+			{
+				systeme[i]->instant.y -= 5;
+				systeme[i]->centre_gravitation.y -= 5;
+			}
+			break;
+		case 'Q':
+		case 'q':
+			for (int i = 0; i < 10; i++)
+			{
+				systeme[i]->instant.x += 5;
+				systeme[i]->centre_gravitation.x += 5;
+			}
+			break;
+		case 'S':
+		case 's':
+			for (int i = 0; i < 10; i++)
+			{
+				systeme[i]->instant.y += 5;
+				systeme[i]->centre_gravitation.y += 5;
+			}
+			break;
+		case 'D':
+		case 'd':
+			for (int i = 0; i < 10; i++)
+			{
+				systeme[i]->instant.x -= 5;
+				systeme[i]->centre_gravitation.x -= 5;
+			}
+			break;
+		case ' ':
+			stop = pause_simul(stop);
 		}
 		break;
 
@@ -227,13 +262,14 @@ void gestionEvenement(EvenementGfx evenement)
 		case ToucheFlecheGauche:
 			if (vitesse > 1)
 			{
-				vitesse -= 1;
+				vitesse -= 10;
 			}
 			break;
 		case ToucheFlecheDroite:
-			vitesse += 1;
+			vitesse += 10;
 			break;
 		}
+		printf("Vitesse : %d", vitesse);
 		break;
 
 	case BoutonSouris:
@@ -330,6 +366,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 		printf("Largeur : %d\t", largeurFenetre());
 		printf("Hauteur : %d\n", hauteurFenetre());
+		update_etoile();
 		break;
 	}
 }
@@ -343,4 +380,15 @@ void affiche_astre(ASTRE *astre)
 	couleurCourante(astre->couleur.r, astre->couleur.v, astre->couleur.b);
 	cercle(astre->instant.x, astre->instant.y, astre->rayon, 30);
 	affiche_nom(astre);
+}
+int pause_simul(int stop)
+{
+	if (stop == 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }

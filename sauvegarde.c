@@ -29,21 +29,21 @@ fgets(<fichier>, <format>, ...)             : lit du texte formaté
  fputs(<fichier>, <format>, ...)            : ecrire du texte formaté
  
  */
-int main(void):
+/*int main(void):
 
 {
     FILE *fic = fopen("nom du fichier à sauvegarder !", "r+");
     
     if (fic == NULL)
             exit(1);
-  fscanf(fic, " /* les différents % que l'on a dans le fichier à sauvegarder */  ", texte, &age, &etc):
+  fscanf(fic, " /* les différents % que l'on a dans le fichier à sauvegarder */ /* ", texte, &age, &etc):
   
-  printf(" /* nom de la fonction utiliser (pour un belle affichage !)  : %s\n ou autre, texte ou autre*/");
-  printf(" /* ainsi de suite */);
+  printf(" /* nom de la fonction utiliser (pour un belle affichage !)  : %s\n ou autre, texte ou autre*/ /*");
+  printf(" ainsi de suite"); */
          
-     fclose(fic);
+     /*fclose(fic);
          
     return 0;
          
          }
-         
+*/    

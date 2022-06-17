@@ -135,8 +135,8 @@ void pivot_planete(ASTRE *planete)
     y = planete->instant.y - planete->centre_gravitation.y;
     alpha = acos(x / planete->distance_ref);
 
-    printf("centre gravi : %f \n",planete->centre_gravitation.y);
-    printf("centre gravi2 : %f \n",planete->centre_gravitation.y *M_PI/180);
+    //printf("centre gravi : %f \n",planete->centre_gravitation.y);
+    //printf("centre gravi2 : %f \n",planete->centre_gravitation.y *M_PI/180);
     
     if(planete->instant.y<planete->centre_gravitation.y)
     {

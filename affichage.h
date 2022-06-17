@@ -9,3 +9,4 @@ des qu'une evenement survient */
 void gestionEvenement(EvenementGfx evenement);
 void affiche_nom(ASTRE *);
 void affiche_astre(ASTRE *);
+int pause_simul(int);

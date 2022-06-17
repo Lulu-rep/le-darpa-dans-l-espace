@@ -1,4 +1,4 @@
-int main(void);
+/*int main(void);
 {
     FILE *fic = fopen("sauvegarde.c", "r+");
     int iteration = 0;
@@ -18,4 +18,4 @@ for (fic = 0 ; fic <100000 ; fic++)
 fclose(fic);
 
 return 0;
-}
+}*/
