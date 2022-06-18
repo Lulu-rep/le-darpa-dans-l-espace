@@ -6,9 +6,13 @@
 #include "GFXLib/BmpLib.h" // Cet include permet de manipuler des fichiers BMP
 #include "GFXLib/ESLib.h"  // Pour utiliser valeurAleatoire()
 #include "affichage.h"
-ASTRE **systeme;
 
+ASTRE **systeme;
+static int nb_etoile;
+static int *etoile;
 static int vitesse = 20;
+char Infos[500];
+
 /* Fonction de trace de cercle */
 void cercle(float centreX, float centreY, float rayon, int pas)
 {
@@ -25,10 +29,15 @@ void cercle(float centreX, float centreY, float rayon, int pas)
 	}
 }
 
-static int nb_etoile;
-static int *etoile;
-static int stop = 0;
 // bouton menu:
+void InfosBasEcran(char *info)
+{
+	couleurCourante(255, 255, 255);
+	rectangle(10, 5, largeurFenetre() - 10, 30);
+	couleurCourante(0, 0, 0);
+	epaisseurDeTrait(1);
+	afficheChaine(info, 12, 15, 12);
+}
 
 void bouton_1()
 {
@@ -87,21 +96,31 @@ void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	static int tab_cadran[50];
+	char TextTemp[10];
+
+	POSITION Neutre;
+
 	switch (evenement)
 	{
 	case Initialisation:
+		// Le quotient de zoom par défaut est de 100 %
+		ZoomSystem = 100;
+		Neutre.x = 0;
+		Neutre.y = 0;
+
 		srand(time(NULL));
 		systeme = init_tab();
 		init_system(systeme);
 		init_cadran(tab_cadran);
 		affich_tab(systeme);
+		static int pause = 0;
 		static int esc = 0;
 		static int defaut = 0;
 		static int save = 0;
 		static int charger = 0;
 		static int quit = 0;
 		static int reprendre = 0;
-		nb_etoile = 500 + rand() % 4500;
+		nb_etoile = 100 + rand() % 500;
 		etoile = malloc(sizeof(int) * nb_etoile);
 		update_etoile();
 		/* Le message "Initialisation" est envoye une seule fois, au debut du
@@ -112,25 +131,40 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// Configure le systeme pour generer un message Temporisation
 		// toutes les 20 millisecondes
-		demandeTemporisation(20);
+		demandeTemporisation(vitesse);
 		break;
 
 	case Temporisation:
-		// On met a jour les coordonnees de la balle
+		if (esc == 0) // On ne refait les calculs que si on n'est pas en mode Menu
+		{
+			// On recalcule la position de toutes les planètes
+			for (int i = 0; i < 10; i++)
+			{
+				pivot_planete(systeme[i],systeme[i]->centre_gravite);
+			}
 
-		// On fait rebondir la balle si necessaire
+			// Construction de la ligne à afficher en bas de l'écran
+			strcpy(Infos, "");
+			sprintf(TextTemp, "%3d", ZoomSystem);
+			strcat(Infos, "Zoom : ");
+			strcat(Infos, TextTemp);
+			strcat(Infos, "   Planete centrale : ");
+			strcat(Infos, PlaneteCentrale->nom);
+			strcat(Infos, "   Vitesse : ");
+			sprintf(TextTemp, "%3d", vitesse);
+			strcat(Infos, TextTemp);
+			strcat(Infos, "   + : Zoomer   - : Dezoomer   fleches : Deplacer la planete referente   p : Pause/Reprise   m : Afficher menu");
+		}
 
-		// Les coordonnees de la balle ayant eventuellement change,
-		// il faut redessiner la fenetre :
 		rafraichisFenetre();
 		break;
 
 	case Affichage:
-
 		// On part d'un fond d'ecran blanc
 		effaceFenetre(0, 0, 0);
-		demandeTemporisation(vitesse);
-		couleurCourante(255, 255, 255);
+
+		// Affiche le fond étoilé
+		couleurCourante(255,255,255);
 		for (int i = 0; i < nb_etoile - 1; i += 2)
 		{
 			cercle(etoile[i], etoile[i + 1], largeurFenetre() / 1024, 3);
@@ -140,14 +174,10 @@ void gestionEvenement(EvenementGfx evenement)
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				rafraichisFenetre();
-				// tab_cadran[i] = pivot_planete(systeme[i], tab_cadran[i]);
-				if (stop == 0)
-				{
-					pivot_planete(systeme[i]);
-				}
 				affiche_astre(systeme[i]);
 			}
+
+			InfosBasEcran(Infos);
 		}
 		else
 		{
@@ -158,100 +188,99 @@ void gestionEvenement(EvenementGfx evenement)
 			bouton_4();
 			bouton_5();
 		}
-		printf("Vitesse actuelle : %d \n",vitesse);
-		/*affiche_astre(systeme[0]);
-		tab_cadran[0]=pivot_planete(systeme[2],tab_cadran[0]);
-		affiche_astre(systeme[2]);
-		tab_cadran[1]=pivot_planete(systeme[1],tab_cadran[1]);
-		affiche_astre(systeme[1]);*/
+
+		demandeTemporisation(vitesse);
 		break;
 	case Clavier:
 		printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
 
 		switch (caractereClavier())
 		{
-		case 'C': /* Pour sortir quelque peu proprement du programme */
-		case 'c': /* On libere la structure image,
-			 c'est plus propre, meme si on va sortir du programme juste apres */
-			free_tab(systeme);
-			termineBoucleEvenements();
-			break;
+			case 'Q': /* Pour sortir quelque peu proprement du programme */
+			case 'q': /* On libere la structure image,
+				c'est plus propre, meme si on va sortir du programme juste apres */
+				free_tab(systeme);
+				termineBoucleEvenements();
+				break;
 
-		case 'F':
-		case 'f':
-			pleinEcran = !pleinEcran; // Changement de mode plein ecran
-			if (pleinEcran)
-			{
-				modePleinEcran();
-			}
-			else
-			{
-				redimensionneFenetre(LargeurFenetre, HauteurFenetre);
-			}
-			break;
+			case 'F':
+			case 'f':
+				pleinEcran = !pleinEcran; // Changement de mode plein ecran
+				if (pleinEcran)
+				{
+					modePleinEcran();
+				}
+				else
+				{
+					redimensionneFenetre(LargeurFenetre, HauteurFenetre);
+				}
+				update_etoile();
+				break;
 
-		case 'R':
-		case 'r':
-			// Configure le systeme pour generer un message Temporisation
-			// toutes les 20 millisecondes (rapide)
-			demandeTemporisation(20);
-			break;
+			case 'P':
+			case 'p':
+				if (pause)
+				{
+					pause = 0;
 
-		case 'L':
-		case 'l':
-			// Configure le systeme pour generer un message Temporisation
-			// toutes les 100 millisecondes (lent)
-			demandeTemporisation(100);
-			break;
+					//On reprend en rafraichissant l'écran
+					demandeTemporisation(vitesse);
+				}
+				else
+				{
+					pause = 1;
+					
+					//On met en pause en ne rafraichissant l'écran
+					demandeTemporisation(-1);
+				}
 
-		case 'M':
-		case 'm':
-			printf("esc %d \n", esc);
-			if (esc == 1)
-			{
-				esc = 0;
-			}
-			else
-			{
-				esc = 1;
-			}
-			// Configure le systeme pour ne plus generer de message Temporisation
-			demandeTemporisation(-1);
-			break;
-		case 'Z':
-		case 'z':
-			for (int i = 0; i < 10; i++)
-			{
-				systeme[i]->instant.y -= 5;
-				systeme[i]->centre_gravitation.y -= 5;
-			}
-			break;
-		case 'Q':
-		case 'q':
-			for (int i = 0; i < 10; i++)
-			{
-				systeme[i]->instant.x += 5;
-				systeme[i]->centre_gravitation.x += 5;
-			}
-			break;
-		case 'S':
-		case 's':
-			for (int i = 0; i < 10; i++)
-			{
-				systeme[i]->instant.y += 5;
-				systeme[i]->centre_gravitation.y += 5;
-			}
-			break;
-		case 'D':
-		case 'd':
-			for (int i = 0; i < 10; i++)
-			{
-				systeme[i]->instant.x -= 5;
-				systeme[i]->centre_gravitation.x -= 5;
-			}
-			break;
-		case ' ':
-			stop = pause_simul(stop);
+				break;
+
+			case 'R':
+			case 'r':
+				//update_etoile();
+				// Configure le systeme pour generer un message Temporisation
+				// toutes les 20 millisecondes (rapide)
+				vitesse--;
+				demandeTemporisation(vitesse);
+				break;
+
+			case 'L':
+			case 'l':
+				// Configure le systeme pour generer un message Temporisation
+				// toutes les 100 millisecondes (lent)
+				vitesse++;
+				demandeTemporisation(vitesse);
+				break;
+
+			case 'M':
+			case 'm':
+				printf("esc %d \n", esc);
+				if (esc == 1)
+				{
+					esc = 0;
+
+					// Configure le systeme pour ne plus generer de message Temporisation
+					demandeTemporisation(-1);
+				}
+				else
+				{
+					esc = 1;
+				}
+
+				break;
+			
+			case '+':
+				// On zoome de 5 %
+				ZoomSystem += 5;
+				zoom_system(systeme,ZoomSystem);
+				break;
+
+			case '-':
+				// On dézoome de 5 %
+				ZoomSystem -= 5;
+				dezoom_system(systeme,ZoomSystem);
+				break;
 		}
 		break;
 
@@ -260,16 +289,27 @@ void gestionEvenement(EvenementGfx evenement)
 		switch (toucheClavier())
 		{
 		case ToucheFlecheGauche:
-			if (vitesse > 1)
+			/*if (vitesse > 1)
 			{
-				vitesse -= 10;
-			}
+				vitesse -= 1;
+			}*/
+			// On déplace la planète centrale vers la gauche
+			PlaneteCentrale->instant.x -= 10;
 			break;
 		case ToucheFlecheDroite:
-			vitesse += 10;
+			//vitesse += 1;
+			// On déplace la planète centrale vers la droite
+			PlaneteCentrale->instant.x += 10;
+			break;
+		case ToucheFlecheBas:
+			// On déplace la planète centrale vers le bas
+			PlaneteCentrale->instant.y -= 10;
+			break;
+		case ToucheFlecheHaut:
+			// On déplace la planète centrale vers le haut
+			PlaneteCentrale->instant.y += 10;
 			break;
 		}
-		printf("Vitesse : %d", vitesse);
 		break;
 
 	case BoutonSouris:
@@ -333,7 +373,6 @@ void gestionEvenement(EvenementGfx evenement)
 					}
 					else
 					{
-						esc = 0;
 						reprendre = 1;
 					}
 				}
@@ -348,13 +387,11 @@ void gestionEvenement(EvenementGfx evenement)
 					}
 					else
 					{
-						termineBoucleEvenements();
 						quit = 1;
 					}
 				}
 			}
 		}
-
 		break;
 
 	case Souris: // Si la souris est deplacee
@@ -368,6 +405,12 @@ void gestionEvenement(EvenementGfx evenement)
 
 		printf("Largeur : %d\t", largeurFenetre());
 		printf("Hauteur : %d\n", hauteurFenetre());
+
+		// On recalcule le centre de l'écran
+		CentreEcran.x = largeurFenetre() / 2;
+		CentreEcran.y = hauteurFenetre() / 2;
+		PlaneteCentrale->instant.x = CentreEcran.x;
+		PlaneteCentrale->instant.y = CentreEcran.y;
 		update_etoile();
 		break;
 	}
@@ -382,15 +425,4 @@ void affiche_astre(ASTRE *astre)
 	couleurCourante(astre->couleur.r, astre->couleur.v, astre->couleur.b);
 	cercle(astre->instant.x, astre->instant.y, astre->rayon, 30);
 	affiche_nom(astre);
-}
-int pause_simul(int stop)
-{
-	if (stop == 0)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
 }
