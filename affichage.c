@@ -333,6 +333,7 @@ void gestionEvenement(EvenementGfx evenement)
 					}
 					else
 					{
+						esc = 0;
 						reprendre = 1;
 					}
 				}
@@ -347,6 +348,7 @@ void gestionEvenement(EvenementGfx evenement)
 					}
 					else
 					{
+						termineBoucleEvenements();
 						quit = 1;
 					}
 				}
