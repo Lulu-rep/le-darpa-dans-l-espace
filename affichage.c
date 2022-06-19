@@ -36,8 +36,8 @@ void InfosBasEcran(char *info)
 	couleurCourante(255, 255, 255);
 	rectangle(10, 5, largeurFenetre() - 10, 30);
 	couleurCourante(0, 0, 0);
-	epaisseurDeTrait(1);
-	afficheChaine(info, 12, 15, 12);
+	epaisseurDeTrait(0.9);
+	afficheChaine(info, 10, 15, 12);
 }
 
 void bouton_1()
@@ -155,7 +155,7 @@ void gestionEvenement(EvenementGfx evenement)
 			strcat(Infos, "   Vitesse : ");
 			sprintf(TextTemp, "%3d", vitesse);
 			strcat(Infos, TextTemp);
-			strcat(Infos, "   + : Zoomer   - : Dezoomer   fleches : Deplacer la planete referente   p : Pause/Reprise   m : Afficher menu");
+			strcat(Infos, "   + : Zoomer   - : Dezoomer   fleches : Deplacer la planete referente   p : Pause/Reprise   m : Afficher menu   f : plein ecran   q : Quitter");
 		}
 
 		affich_tab(systeme);
@@ -309,13 +309,22 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				vitesse -= 1;
 			}*/
+			// On déplace toutes les planètes vers la gauche
+			for(int i = 0 ; i < sizeof(systeme) ; i++)
+			{
+				systeme[i]->instant.x -= 10;
+			}
 			// On déplace la planète centrale vers la gauche
-			PlaneteCentrale->instant.x -= 10;
+			//PlaneteCentrale->instant.x -= 10;
 			break;
 		case ToucheFlecheDroite:
 			//vitesse += 1;
 			// On déplace la planète centrale vers la droite
-			PlaneteCentrale->instant.x += 10;
+			for(int i = 0 ; i < sizeof(systeme) ; i++)
+			{
+				systeme[i]->instant.x += 10;
+			}
+			//PlaneteCentrale->instant.x += 10;
 			break;
 		case ToucheFlecheBas:
 			// On déplace la planète centrale vers le bas
