@@ -417,6 +417,7 @@ void gestionEvenement(EvenementGfx evenement)
 					else
 					{
 						quit = 1;
+						free_tab(systeme);
 						termineBoucleEvenements();
 					}
 				}
