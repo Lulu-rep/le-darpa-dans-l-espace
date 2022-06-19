@@ -4,12 +4,6 @@ main: main.o libisentlib.a affichage.o menu.o moteur.o sauvegarde.o
 # et de-commenter la ligne de commande ci-apres :
 #	gcc -Wall exemple.o -o exemple libisentlib.a -lm -framework OpenGL -framework GLUT
 
-exempleTortue: exempleTortue.o libisentlib.a
-	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -lglut -lGL -lX11
-# Sous MacOSX, commenter la ligne de commande ci-dessus (en mettant un # au debut)
-# et de-commenter la ligne de commande ci-apres :
-#	gcc -Wall exempleTortue.o -o exempleTortue libisentlib.a -lm -framework OpenGL -framework GLUT
-
 main.o: main.c GFXLib/GfxLib.h GFXLib/BmpLib.h GFXLib/ESLib.h
 	gcc -Wall -c main.c
 

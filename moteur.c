@@ -193,8 +193,8 @@ void init_system(ASTRE** tab)
     initstruct(soleil);
 
     // Définition du centre de l'écran
-    CentreEcran.x = largeurFenetre() / 2;
-    CentreEcran.y = hauteurFenetre() / 2;
+    CentreEcran.x = LargeurFenetre / 2;
+    CentreEcran.y = HauteurFenetre / 2;
 
     soleil->nom = "Soleil";
     soleil->distance_ref = 1;

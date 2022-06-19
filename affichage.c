@@ -155,10 +155,8 @@ void gestionEvenement(EvenementGfx evenement)
 			strcat(Infos, "   Vitesse : ");
 			sprintf(TextTemp, "%3d", vitesse);
 			strcat(Infos, TextTemp);
-			strcat(Infos, "   + : Zoomer   - : Dezoomer   fleches : Deplacer la planete referente   p : Pause/Reprise   m : Afficher menu   f : plein ecran   q : Quitter");
+			strcat(Infos, "   + : Zoomer   - : Dezoomer   fleches : Deplacer la planete referente   <ESPACE> : Pause/Reprise   m : Afficher menu   f : plein ecran   q : Quitter");
 		}
-
-		affich_tab(systeme);
 
 		rafraichisFenetre();
 		break;
@@ -221,8 +219,7 @@ void gestionEvenement(EvenementGfx evenement)
 				update_etoile();
 				break;
 
-			case 'P':
-			case 'p':
+			case ' ':
 				if (pause)
 				{
 					pause = 0;
@@ -245,7 +242,10 @@ void gestionEvenement(EvenementGfx evenement)
 				//update_etoile();
 				// Configure le systeme pour generer un message Temporisation
 				// toutes les 20 millisecondes (rapide)
-				vitesse--;
+				if(vitesse > 1)
+				{
+					vitesse--;
+				}
 				demandeTemporisation(vitesse);
 				break;
 
@@ -309,30 +309,33 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				vitesse -= 1;
 			}*/
-			// On déplace toutes les planètes vers la gauche
-			for(int i = 0 ; i < sizeof(systeme) ; i++)
-			{
-				systeme[i]->instant.x -= 10;
-			}
-			// On déplace la planète centrale vers la gauche
-			//PlaneteCentrale->instant.x -= 10;
-			break;
-		case ToucheFlecheDroite:
-			//vitesse += 1;
-			// On déplace la planète centrale vers la droite
-			for(int i = 0 ; i < sizeof(systeme) ; i++)
+			// On déplace toutes les planètes vers la droite
+			for(int i = 0 ; i < 10 ; i++)
 			{
 				systeme[i]->instant.x += 10;
 			}
-			//PlaneteCentrale->instant.x += 10;
+			break;
+		case ToucheFlecheDroite:
+			//vitesse += 1;
+			// On déplace la planète centrale vers la gauche
+			for(int i = 0 ; i < 10 ; i++)
+			{
+				systeme[i]->instant.x -= 10;
+			}
 			break;
 		case ToucheFlecheBas:
-			// On déplace la planète centrale vers le bas
-			PlaneteCentrale->instant.y -= 10;
+			// On déplace la planète centrale vers le haut
+			for(int i = 0 ; i < 10 ; i++)
+			{
+				systeme[i]->instant.y += 10;
+			}
 			break;
 		case ToucheFlecheHaut:
-			// On déplace la planète centrale vers le haut
-			PlaneteCentrale->instant.y += 10;
+			// On déplace la planète centrale vers le bas
+			for(int i = 0 ; i < 10 ; i++)
+			{
+				systeme[i]->instant.y -= 10;
+			}
 			break;
 		}
 		break;
@@ -432,8 +435,8 @@ void gestionEvenement(EvenementGfx evenement)
 		printf("Hauteur : %d\n", hauteurFenetre());
 
 		// On recalcule le centre de l'écran
-		CentreEcran.x = largeurFenetre() / 2;
-		CentreEcran.y = hauteurFenetre() / 2;
+		CentreEcran.x = LargeurFenetre / 2;
+		CentreEcran.y = HauteurFenetre / 2;
 		PlaneteCentrale->instant.x = CentreEcran.x;
 		PlaneteCentrale->instant.y = CentreEcran.y;
 		update_etoile();

@@ -1,3 +1,6 @@
+#define LargeurFenetre 1280
+#define HauteurFenetre 720
+
 typedef struct POSITION{
     float x;
     float y;
