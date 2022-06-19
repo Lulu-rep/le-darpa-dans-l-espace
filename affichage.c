@@ -13,7 +13,6 @@ static int nb_etoile;
 static int *etoile;
 static int vitesse = 20;
 char Infos[500];
-
 /* Fonction de trace de cercle */
 void cercle(float centreX, float centreY, double rayon, int pas)
 {
@@ -99,15 +98,11 @@ void gestionEvenement(EvenementGfx evenement)
 	static int tab_cadran[50];
 	char TextTemp[10];
 
-	POSITION Neutre;
-
 	switch (evenement)
 	{
 	case Initialisation:
 		// Le quotient de zoom par défaut est de 100 %
 		ZoomSystem = 100;
-		Neutre.x = 0;
-		Neutre.y = 0;
 
 		srand(time(NULL));
 		systeme = init_tab();
@@ -116,12 +111,7 @@ void gestionEvenement(EvenementGfx evenement)
 		affich_tab(systeme);
 		static int IndicePlanete = 0;
 		static int pause = 0;
-		static int esc = 0;
-		static int defaut = 0;
-		static int save = 0;
-		static int charger = 0;
-		static int quit = 0;
-		static int reprendre = 0;
+		static int esc = 2;
 		nb_etoile = 100 + rand() % 500;
 		etoile = malloc(sizeof(int) * nb_etoile);
 		update_etoile();
@@ -181,13 +171,17 @@ void gestionEvenement(EvenementGfx evenement)
 
 			InfosBasEcran(Infos);
 		}
-		else
+		else if(esc==1)
 		{
 			rafraichisFenetre();
-			bouton_1();
 			bouton_2();
-			bouton_3();
 			bouton_4();
+			bouton_5();
+		}
+		else{
+			rafraichisFenetre();
+			bouton_1();
+			bouton_3();
 			bouton_5();
 		}
 
@@ -260,7 +254,7 @@ void gestionEvenement(EvenementGfx evenement)
 			case 'M':
 			case 'm':
 				printf("esc %d \n", esc);
-				if (esc == 1)
+				if (esc == 1 ||esc==2)
 				{
 					esc = 0;
 
@@ -346,82 +340,48 @@ void gestionEvenement(EvenementGfx evenement)
 		{
 			if (esc == 1)
 			{
-				// rectangle(largeurFenetre()/10,hauteurFenetre()/5,largeurFenetre()/3,hauteurFenetre()/10);
-				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 3.33 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 2.73)
-				{
-
-					printf("defaut %d \n", defaut);
-					if (defaut == 1)
-					{
-						defaut = 0;
-					}
-					else
-					{
-						defaut = 1;
-					}
-				}
 
 				// rectangle(largeurFenetre()/2,hauteurFenetre()/5,largeurFenetre()-largeurFenetre()/4,hauteurFenetre()/10);
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 2.31 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 2)
 				{
 
-					printf("save %d \n", save);
-					if (save == 1)
-					{
-						save = 0;
-					}
-					else
-					{
-						save = 1;
-					}
+					menu_principal(2);
 				}
 
-				// rectangle(largeurFenetre()/10,0,largeurFenetre()/3,hauteurFenetre()/15);
-				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.76 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.58)
-				{
-
-					printf("charger %d \n", charger);
-					if (charger == 1)
-					{
-						charger = 0;
-					}
-					else
-					{
-						charger = 1;
-					}
-				}
 
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.43 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.30)
 				{
-
-					printf("reprendre %d \n", reprendre);
-					if (reprendre == 1)
-					{
-						reprendre = 0;
-					}
-					else
-					{
-						reprendre = 1;
-						esc = 0;
-					}
+					esc=menu_principal(5);
 				}
 
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.2 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.11)
 				{
-
-					printf("quit %d \n", quit);
-					if (quit == 1)
-					{
-						quit = 0;
-					}
-					else
-					{
-						quit = 1;
-						free_tab(systeme);
-						termineBoucleEvenements();
-					}
+					free(systeme);
+					menu_principal(4);
 				}
 			}
+			if (esc==2)
+			{
+				// rectangle(largeurFenetre()/10,hauteurFenetre()/5,largeurFenetre()/3,hauteurFenetre()/10);
+				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 3.33 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 2.73)
+				{
+					esc=menu_principal(5);
+				}
+
+
+				// rectangle(largeurFenetre()/10,0,largeurFenetre()/3,hauteurFenetre()/15);
+				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.76 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.58)
+				{
+					menu_principal(3);
+				}
+
+				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.2 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.11)
+				{
+					free(systeme);
+					menu_principal(4);
+				}
+			}
+			
 		}
 		break;
 

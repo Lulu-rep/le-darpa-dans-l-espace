@@ -3,3 +3,45 @@
 #include <math.h> // Pour pouvoir utiliser sin() et cos()
 #include <time.h>
 #include "menu.h"
+#include "affichage.h"
+
+
+
+int menu_principal(int choix){
+    switch (choix)
+    {
+    case 1:
+        lancer_simul();
+        break;
+    case 2:
+        sauvegarder();
+        break;
+    case 3:
+        charger();
+        break;
+    case 4:
+        quitter();
+        break;
+    case 5:
+        return reprendre();
+        break;
+    default:
+        break;
+    }
+    return -1;
+}
+void quitter(){
+	termineBoucleEvenements();
+}
+void lancer_simul(){
+    printf("On lance la simulation");
+}
+void charger(){
+    printf("On charge une simulation passée en fichier");
+}
+void sauvegarder(){
+    printf("On save");
+}
+int reprendre(){
+    return 0;
+}
