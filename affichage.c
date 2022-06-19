@@ -402,6 +402,7 @@ void gestionEvenement(EvenementGfx evenement)
 					else
 					{
 						reprendre = 1;
+						esc = 0;
 					}
 				}
 
@@ -416,6 +417,7 @@ void gestionEvenement(EvenementGfx evenement)
 					else
 					{
 						quit = 1;
+						termineBoucleEvenements();
 					}
 				}
 			}
