@@ -2,6 +2,7 @@
 #include <stdio.h>	// Pour pouvoir utiliser printf()
 #include <math.h>	// Pour pouvoir utiliser sin() et cos()
 #include <time.h>
+#include <string.h>
 #include "GFXLib/GfxLib.h" // Seul cet include est necessaire pour faire du graphique
 #include "GFXLib/BmpLib.h" // Cet include permet de manipuler des fichiers BMP
 #include "GFXLib/ESLib.h"  // Pour utiliser valeurAleatoire()
@@ -14,7 +15,7 @@ static int vitesse = 20;
 char Infos[500];
 
 /* Fonction de trace de cercle */
-void cercle(float centreX, float centreY, float rayon, int pas)
+void cercle(float centreX, float centreY, double rayon, int pas)
 {
 	const double PasAngulaire = 2. * M_PI / pas;
 	int index;
@@ -23,8 +24,8 @@ void cercle(float centreX, float centreY, float rayon, int pas)
 	{
 		const double angle = 2. * M_PI * index / pas; // on calcule l'angle de depart du secteur
 		triangle(centreX, centreY,
-				 centreX + rayon * cos(angle), centreY + rayon * sin(angle),
-				 centreX + rayon * cos(angle + PasAngulaire), centreY + rayon * sin(angle + PasAngulaire));
+				centreX + rayon * cos(angle), centreY + rayon * sin(angle),
+				centreX + rayon * cos(angle + PasAngulaire), centreY + rayon * sin(angle + PasAngulaire));
 		// On trace le secteur a l'aide d'un triangle => approximation d'un cercle
 	}
 }
@@ -113,6 +114,7 @@ void gestionEvenement(EvenementGfx evenement)
 		init_system(systeme);
 		init_cadran(tab_cadran);
 		affich_tab(systeme);
+		static int IndicePlanete = 0;
 		static int pause = 0;
 		static int esc = 0;
 		static int defaut = 0;
@@ -140,7 +142,7 @@ void gestionEvenement(EvenementGfx evenement)
 			// On recalcule la position de toutes les planètes
 			for (int i = 0; i < 10; i++)
 			{
-				pivot_planete(systeme[i],systeme[i]->centre_gravite);
+				pivot_planete(systeme[i]);
 			}
 
 			// Construction de la ligne à afficher en bas de l'écran
@@ -155,6 +157,8 @@ void gestionEvenement(EvenementGfx evenement)
 			strcat(Infos, TextTemp);
 			strcat(Infos, "   + : Zoomer   - : Dezoomer   fleches : Deplacer la planete referente   p : Pause/Reprise   m : Afficher menu");
 		}
+
+		affich_tab(systeme);
 
 		rafraichisFenetre();
 		break;
@@ -273,13 +277,25 @@ void gestionEvenement(EvenementGfx evenement)
 			case '+':
 				// On zoome de 5 %
 				ZoomSystem += 5;
-				zoom_system(systeme,ZoomSystem);
+				zoom_system(systeme, 1.05);
 				break;
 
 			case '-':
 				// On dézoome de 5 %
 				ZoomSystem -= 5;
-				dezoom_system(systeme,ZoomSystem);
+				zoom_system(systeme, 0.95);
+				break;
+
+			case 'W':
+			case 'w':
+				// On met le focus sur la planète suivante
+				IndicePlanete++;
+				if(IndicePlanete == 10) // Si on est sur la dernière planete, on revient à la première (ie Soleil)
+				{
+					IndicePlanete = 0;
+				}
+				PlaneteCentrale = systeme[IndicePlanete];
+				update_focus(systeme);
 				break;
 		}
 		break;
@@ -424,5 +440,16 @@ void affiche_astre(ASTRE *astre)
 {
 	couleurCourante(astre->couleur.r, astre->couleur.v, astre->couleur.b);
 	cercle(astre->instant.x, astre->instant.y, astre->rayon, 30);
+	/*
+	// Si le rayon de la planète est supérieur à 1, on cacule le cercle
+	if (astre->rayon > 1)
+	{
+		cercle(astre->instant.x, astre->instant.y, astre->rayon, 30);
+	}
+	else // Sinon on affiche seulement un point
+	{
+		point(astre->instant.x, astre->instant.y);
+	}
+*/
 	affiche_nom(astre);
 }

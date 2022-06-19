@@ -23,34 +23,28 @@ POSITION inistruct_pos(POSITION pos)
 
 void initstruct(ASTRE* planete)
 {
-    POSITION inst;
-    POSITION gravitation;
-    COULEUR col;
-    col = inistruct_couleur(col);
-    inst = inistruct_pos(inst);
-    gravitation = inistruct_pos(gravitation);
-    //planete->centre_gravitation = gravitation;
-    planete->centre_gravite = planete; // pas sûr...
+    POSITION inst = inistruct_pos(inst);
+    COULEUR col = inistruct_couleur(col);
+
+    planete->centre_gravite = planete;
     planete->instant = inst;
     planete->rayon = 0;
     planete->vitesse = 0;
     planete->distance_ref = 0;
     planete->couleur = col;
     planete->nom = malloc(sizeof(char)*30);
-    planete->masse = 0;
 }
 
 void affich_struct(ASTRE* planete)
 {
     puts("------------------------------------------------");
     printf("nom : %s \n",planete->nom);
-    printf("rayon de la planete: %f \n",planete->rayon);
+    printf("rayon de la planete: %lf \n",planete->rayon);
     //printf("centre gravitation: (x=%f;y=%f) \n",planete->centre_gravitation.x,planete->centre_gravitation.y);
     printf("centre gravitation: (x=%f;y=%f) \n",planete->centre_gravite->instant.x,planete->centre_gravite->instant.y);
     printf("position instant: (x=%f,y=%f) \n",planete->instant.x,planete->instant.y);
     printf("vitesse: %lf \n",planete->vitesse);
     printf("distance au ref: %lf \n",planete->distance_ref);
-    printf("masse : %lf \n",planete->masse);
     printf("couleur: r=%d, v=%d, b=%d \n",planete->couleur.r,planete->couleur.v,planete->couleur.b);
     puts("------------------------------------------------");
 }
@@ -60,9 +54,7 @@ void define_struct(ASTRE* planete)
     puts("nom de la planete ?");
     scanf("%s",planete->nom);
     puts("rayon ?");
-    scanf("%f",&planete->rayon);
-    puts("gravitation");
-    //planete->centre_gravitation= define_position(planete->centre_gravitation);
+    scanf("%lf",&planete->rayon);
     puts("instant t");
     planete->instant = define_position(planete->instant);
     puts("vitesse ?");
@@ -92,75 +84,6 @@ COULEUR define_couleur(COULEUR col)
 }
 
 /*
-int pivot_planete(ASTRE *planete, int cadran)
-{
-    double alpha;
-    float x, y;
-    x = planete->instant.x - planete->centre_gravitation.x;
-    y = planete->instant.y - planete->centre_gravitation.y;
-    alpha = acos(x / planete->distance_ref);
-
-    alpha = (alpha * 180) / M_PI;
-
-    if (cadran == 1)
-    {
-        double temp = 180 - alpha;
-        alpha = 180 + temp;
-    }
-    if (alpha >= 360)
-    {
-        alpha = alpha - 360;
-        cadran = 0;
-    }
-    if (alpha >= 180)
-    {
-        cadran = 1;
-    }
-    else
-    {
-        cadran = 0;
-    }
-    alpha = alpha + planete->vitesse;
-
-    alpha = (alpha * M_PI) / 180;
-    x = cos(alpha) * planete->distance_ref;
-    y = sin(alpha) * planete->distance_ref;
-    planete->instant.x = x + planete->centre_gravitation.x;
-    planete->instant.y = y + planete->centre_gravitation.y;
-    return cadran;
-}
-*/
-
-/*
-void pivot_planete(ASTRE *planete)
-{
-    double alpha;
-    float x, y;
-    x = planete->instant.x - planete->centre_gravitation.x;
-    y = planete->instant.y - planete->centre_gravitation.y;
-    alpha = acos(x / planete->distance_ref);
-
-    printf("centre gravi : %f \n",planete->centre_gravitation.y);
-    printf("centre gravi2 : %f \n",planete->centre_gravitation.y *M_PI/180);
-    
-    if(planete->instant.y<planete->centre_gravitation.y)
-    {
-        alpha = -alpha;
-    }
-    
-    alpha = (alpha + planete->vitesse*0.0001);
-    
-
-    //alpha = (alpha * M_PI) / 180;
-    x = cos(alpha) * planete->distance_ref;
-    y = sin(alpha) * planete->distance_ref;
-    planete->instant.x = x + planete->centre_gravitation.x;
-    planete->instant.y = y + planete->centre_gravitation.y;
-}
-*/
-
-
-
 void pivot_planete(ASTRE *planete, ASTRE *centre)
 {
     double alpha;
@@ -170,8 +93,7 @@ void pivot_planete(ASTRE *planete, ASTRE *centre)
     y = planete->instant.y - centre->instant.y;
     alpha = acos(x / planete->distance_ref);
 
-    //if(planete->instant.y<planete->centre_gravitation.y)
-    if(planete->instant.y<centre->instant.y)
+    if(planete->instant.y < centre->instant.y)
     {
         alpha = -alpha;
     }
@@ -183,29 +105,61 @@ void pivot_planete(ASTRE *planete, ASTRE *centre)
     y = sin(alpha) * planete->distance_ref;
 
     // Bidouille si Lune
-    if(!strncmp(planete->nom,"Lune",6))
+    if(!strcmp(planete->nom,"Lune"))
     {
         alpha=30;
         x = cos(alpha) * planete->distance_ref * 40;
         y = sin(alpha) * planete->distance_ref * 40;
-        /*affich_struct(planete);
-        affich_struct(centre);
-        printf("x : %f \n",x);
-        printf("y : %f \n",y);
-        printf("alpha : %f %f \n",alpha,x / planete->distance_ref);*/
     }    
    
     // Bidouille si Soleil
-    if(!strncmp(planete->nom,"Soleil",6))
+    if(!strcmp(planete->nom,"Soleil"))
     {
         y=0;
     } 
-    
 
     planete->instant.x = x + centre->instant.x;
     planete->instant.y = y + centre->instant.y;
 }
+*/
 
+void pivot_planete(ASTRE *planete)
+{
+    double alpha;
+    float x, y;
+    
+    x = planete->instant.x - planete->centre_gravite->instant.x;
+    y = planete->instant.y - planete->centre_gravite->instant.y;
+    alpha = acos(x / planete->distance_ref);
+
+    if (planete->instant.y < planete->centre_gravite->instant.y)
+    {
+        alpha = -alpha;
+    }
+    
+    alpha = (alpha + planete->vitesse * 0.0001);  
+
+    //alpha = (alpha * M_PI) / 180;
+    x = cos(alpha) * planete->distance_ref;
+    y = sin(alpha) * planete->distance_ref;
+
+    // Bidouille si Lune
+    if(!strcmp(planete->nom,"Lune"))
+    {
+        alpha=30;
+        x = cos(alpha) * planete->distance_ref * 40;
+        y = sin(alpha) * planete->distance_ref * 40;
+    }    
+   
+    // Bidouille si Soleil
+    if(!strcmp(planete->nom,"Soleil"))
+    {
+        y = 0;
+    } 
+
+    planete->instant.x = x + planete->centre_gravite->instant.x;
+    planete->instant.y = y + planete->centre_gravite->instant.y;
+}
 
 ASTRE** init_tab()
 {
@@ -251,8 +205,6 @@ void init_system(ASTRE** tab)
     // On place le Soleil au centre de la fenêtre par défaut
     soleil->instant.x = CentreEcran.x;
     soleil->instant.y = CentreEcran.y;
-    //soleil->instant.x=1920/2;
-    //soleil->instant.y=940/2;
     soleil->couleur.r = 210;
     soleil->couleur.v = 89;
     soleil->couleur.b = 5;
@@ -264,7 +216,6 @@ void init_system(ASTRE** tab)
     mercure->centre_gravite = soleil;
     mercure->instant.x = mercure->centre_gravite->instant.x + mercure->distance_ref;
     mercure->instant.y = mercure->centre_gravite->instant.y + mercure->distance_ref;
-    mercure->masse = 0.330*pow(10,24);
     mercure->couleur.r = 171;
     mercure->couleur.v = 107;
     mercure->couleur.b = 0;
@@ -277,7 +228,6 @@ void init_system(ASTRE** tab)
     venus->centre_gravite = soleil;
     venus->instant.x = venus->centre_gravite->instant.x + venus->distance_ref;
     venus->instant.y = venus->centre_gravite->instant.y + venus->distance_ref;
-    venus->masse = 4.87*pow(10,24);
     venus->couleur.r = 243;
     venus->couleur.v = 186;
     venus->couleur.b = 24;
@@ -290,7 +240,6 @@ void init_system(ASTRE** tab)
     terre->centre_gravite = soleil;
     terre->instant.x = terre->centre_gravite->instant.x + terre->distance_ref;
     terre->instant.y = terre->centre_gravite->instant.y + terre->distance_ref;
-    terre->masse = 5.97*pow(10,24);
     terre->couleur.r = 22;
     terre->couleur.v = 166;
     terre->couleur.b = 215;
@@ -369,26 +318,7 @@ void init_system(ASTRE** tab)
     // Par défaut, la planète au centre de l'écran est le Soleil
     PlaneteCentrale = soleil;
 
-    
-/****************************************************
-*                Changements par Isaure             *
-* Car pb d'allocation mémoire et donc de libération *
-*****************************************************/
-
-/*
-    ajout_tab(tab,soleil);
-    ajout_tab(tab,mercure);
-    ajout_tab(tab,venus);
-    ajout_tab(tab,terre);
-    ajout_tab(tab,lune);
-    ajout_tab(tab,mars);
-    ajout_tab(tab,jupiter);
-    ajout_tab(tab,saturne);
-    ajout_tab(tab,uranus);
-    ajout_tab(tab,neptune);
-*/
-
-
+    // On remplit le tableau d'astres
     tab[0]=soleil;
     tab[1]=mercure;
     tab[2]=venus;
@@ -404,81 +334,61 @@ void init_system(ASTRE** tab)
 // Zoom du système solaire 
 // Paramètres :
 // - tab : Système de planètes à modifier
-// - zoom : Pourcentage du zoom à appliquer
-void zoom_system(ASTRE** tab, int zoom)
+// - QuotientZoom : Pourcentage du zoom à appliquer
+void zoom_system(ASTRE** tab, float QuotientZoom)
 {
-    float QuotientZoom = zoom / 100;
-
     // Système solaire avec 10 planètes
     for (int i = 0; i < 10; i++)
     {
-        tab[i]->distance_ref = tab[i]->distance_ref + (tab[i]->distance_ref * QuotientZoom);
-        tab[i]->rayon = tab[i]->rayon + (tab[i]->rayon * QuotientZoom);
+        tab[i]->distance_ref = tab[i]->distance_ref * QuotientZoom;
+        tab[i]->rayon = tab[i]->rayon * QuotientZoom;
 
         // Si la planète courante est la planète centrale, on ne change pas ses coordonnées (x,y)
         if (tab[i] != PlaneteCentrale)
         {
-            tab[i]->instant.x = tab[i]->instant.x + (tab[i]->instant.x * QuotientZoom);
-            tab[i]->instant.y = tab[i]->instant.y + (tab[i]->instant.y * QuotientZoom);
+            tab[i]->instant.x = tab[i]->instant.x * QuotientZoom;
+            tab[i]->instant.y = tab[i]->instant.y * QuotientZoom;
         }
     }
-}
-
-// Dézoom du système solaire 
-// Paramètres :
-// - tab : Système de planètes à modifier
-// - zoom : Pourcentage du dézoom à appliquer
-void dezoom_system(ASTRE** tab, int zoom)
-{
-    float QuotientZoom = zoom / 100;
-
-    if (QuotientZoom >= 1)
-    {
-        // Système solaire avec 10 planètes
-        for (int i = 0; i < 10; i++)
-        {
-            tab[i]->distance_ref = tab[i]->distance_ref * QuotientZoom;
-            tab[i]->rayon = tab[i]->rayon * QuotientZoom;
-
-            // Si la planète courante est la planète centrale, on ne change pas ses coordonnées (x,y)
-            if (tab[i] != PlaneteCentrale)
-            {
-                tab[i]->instant.x = tab[i]->instant.x * QuotientZoom;
-                tab[i]->instant.y = tab[i]->instant.y * QuotientZoom;
-            }
-        }
-    }
-    else
-    {
-        // Système solaire avec 10 planètes
-        for (int i = 0; i < 10; i++)
-        {
-            tab[i]->distance_ref = tab[i]->distance_ref * QuotientZoom;
-            tab[i]->rayon = tab[i]->rayon * QuotientZoom;
-
-            // Si la planète courante est la planète centrale, on ne change pas ses coordonnées (x,y)
-            if (tab[i] != PlaneteCentrale)
-            {
-                tab[i]->instant.x = tab[i]->instant.x * QuotientZoom;
-                tab[i]->instant.y = tab[i]->instant.y * QuotientZoom;
-            }
-        }        
-    }
-
 }
 
 // Recalcul les coordonnées des planètes par rapport à la planèete centrale
 // Paramètres :
 // - tab : Système de planètes à modifier
-// - centre : coordonnées (x,y) du centre du repère
-void update_focus(ASTRE** tab, POSITION centre)
+void update_focus(ASTRE** tab)
 {
-    // Système solaire avec 10 planètes
+    int i = 0;
+    
+    // On sauvegarde la position actuelle de la nouvelle planète centrale
+    POSITION OldPosition = PlaneteCentrale->instant;
+
+    // La nouvelle planète centrale prend les coordonnées du milieu de l'écran
+    PlaneteCentrale->instant.x = CentreEcran.x;
+    PlaneteCentrale->instant.y = CentreEcran.y;
+
+    // On recherche l'indice du Soleil dans le système solaire
+    while ((strcmp(tab[i]->nom, "Soleil")))
+    {
+        i++;
+    }
+
+    // Si la planète courante est le Soleil, on change ses coordonnées par rapport à la nouvelle planète centrale
+    if (strcmp(tab[i]->nom, "Soleil"))
+    {
+        tab[i]->instant.x = tab[i]->instant.x - OldPosition.x;
+        tab[i]->instant.y = tab[i]->instant.y - OldPosition.y;
+    }
+
+    // On recalcule les coordonnées des 10 planètes en fonction de la nouvelle position du soleil
     for (int i = 0; i < 10; i++)
     {
-        // Si la planète courante est la planète centrale, on ne change pas ses coordonnées (x,y)
-        tab[i]->instant.x = tab[i]->instant.x + (tab[i]->instant.x);
-        tab[i]->instant.y = tab[i]->instant.y + (tab[i]->instant.y);
+        // Si la planète courante est la planète centrale, on ne change rien
+        // Sinon on réinitialise ses coordonnées (x,y) par rapport à sa planète de gravité
+        //if (strcmp(tab[i]->nom, PlaneteCentrale->nom) && strcmp(tab[i]->nom, "Soleil"))
+        //{
+            tab[i]->instant.x = tab[i]->centre_gravite->instant.x + tab[i]->distance_ref;
+            tab[i]->instant.y = tab[i]->centre_gravite->instant.y + tab[i]->distance_ref;
+        //}
     }
 }
 
@@ -506,7 +416,7 @@ void affich_tab(ASTRE** tab)
 
 void free_tab(ASTRE** tab)
 {
-       for(int i =0; i<sizeof(tab); i++)
+    for(int i =0; i < sizeof(tab); i++)
     {
         free(tab[i]);
     }
