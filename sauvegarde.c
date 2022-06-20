@@ -22,7 +22,7 @@ fgets(<fichier>, <format>, ...)             : lit du texte formaté
  fputs(<chaine>, <fichier>)                 : ecrire une ligne de texte
  fputs(<fichier>, <format>, ...)            : ecrire du texte formaté
  
- */
+ 
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -50,3 +50,4 @@ int main(int argc, char *argv[])
  
     return 0;
 }
+*/

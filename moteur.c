@@ -83,45 +83,6 @@ COULEUR define_couleur(COULEUR col)
     return col;
 }
 
-/*
-void pivot_planete(ASTRE *planete, ASTRE *centre)
-{
-    double alpha;
-    float x, y;
-    
-    x = planete->instant.x - centre->instant.x;
-    y = planete->instant.y - centre->instant.y;
-    alpha = acos(x / planete->distance_ref);
-
-    if(planete->instant.y < centre->instant.y)
-    {
-        alpha = -alpha;
-    }
-    
-    alpha = (alpha + planete->vitesse*0.0001);  
-
-    //alpha = (alpha * M_PI) / 180;
-    x = cos(alpha) * planete->distance_ref;
-    y = sin(alpha) * planete->distance_ref;
-
-    // Bidouille si Lune
-    if(!strcmp(planete->nom,"Lune"))
-    {
-        alpha=30;
-        x = cos(alpha) * planete->distance_ref * 40;
-        y = sin(alpha) * planete->distance_ref * 40;
-    }    
-   
-    // Bidouille si Soleil
-    if(!strcmp(planete->nom,"Soleil"))
-    {
-        y=0;
-    } 
-
-    planete->instant.x = x + centre->instant.x;
-    planete->instant.y = y + centre->instant.y;
-}
-*/
 
 void pivot_planete(ASTRE *planete)
 {
@@ -344,11 +305,11 @@ void zoom_system(ASTRE** tab, float QuotientZoom)
         tab[i]->rayon = tab[i]->rayon * QuotientZoom;
 
         // Si la planète courante est la planète centrale, on ne change pas ses coordonnées (x,y)
-        if (tab[i] != PlaneteCentrale)
-        {
+        
+        
             tab[i]->instant.x = tab[i]->instant.x * QuotientZoom;
             tab[i]->instant.y = tab[i]->instant.y * QuotientZoom;
-        }
+        
     }
 }
 
@@ -405,6 +366,7 @@ void ajout_tab(ASTRE** tab, ASTRE* planete)
 }
 
 
+
 void affich_tab(ASTRE** tab)
 {
     for(int i =0; i<sizeof(tab); i++)
@@ -422,11 +384,4 @@ void free_tab(ASTRE** tab)
     }
     free(tab);
 
-}
-
-void init_cadran(int tab_cadran[]){
-    static int cadran=0;
-    for(int i=0;i<50;i++){
-        tab_cadran[i]=cadran;
-    }
 }

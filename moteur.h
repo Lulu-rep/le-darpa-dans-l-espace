@@ -62,7 +62,6 @@ void affich_tab(ASTRE** tab);
 
 void free_tab(ASTRE** tab);
 
-void init_cadran(int tab_cadran[]);
 
 ASTRE *PlaneteCentrale;
 POSITION CentreEcran;

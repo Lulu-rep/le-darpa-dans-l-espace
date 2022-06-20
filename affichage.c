@@ -95,7 +95,6 @@ des qu'une evenement survient */
 void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
-	static int tab_cadran[50];
 	char TextTemp[10];
 
 	switch (evenement)
@@ -107,7 +106,6 @@ void gestionEvenement(EvenementGfx evenement)
 		srand(time(NULL));
 		systeme = init_tab();
 		init_system(systeme);
-		init_cadran(tab_cadran);
 		affich_tab(systeme);
 		static int IndicePlanete = 0;
 		static int pause = 0;
