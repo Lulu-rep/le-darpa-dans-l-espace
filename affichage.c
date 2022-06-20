@@ -11,7 +11,7 @@
 ASTRE **systeme;
 static int nb_etoile;
 static int *etoile;
-static int vitesse = 20;
+static int vitesse = 100;
 char Infos[500];
 /* Fonction de trace de cercle */
 void cercle(float centreX, float centreY, double rayon, int pas)
@@ -23,8 +23,8 @@ void cercle(float centreX, float centreY, double rayon, int pas)
 	{
 		const double angle = 2. * M_PI * index / pas; // on calcule l'angle de depart du secteur
 		triangle(centreX, centreY,
-				centreX + rayon * cos(angle), centreY + rayon * sin(angle),
-				centreX + rayon * cos(angle + PasAngulaire), centreY + rayon * sin(angle + PasAngulaire));
+				 centreX + rayon * cos(angle), centreY + rayon * sin(angle),
+				 centreX + rayon * cos(angle + PasAngulaire), centreY + rayon * sin(angle + PasAngulaire));
 		// On trace le secteur a l'aide d'un triangle => approximation d'un cercle
 	}
 }
@@ -96,6 +96,7 @@ void gestionEvenement(EvenementGfx evenement)
 {
 	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
 	char TextTemp[10];
+	float coef_vitesse = 99.2;
 
 	switch (evenement)
 	{
@@ -121,7 +122,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 		// Configure le systeme pour generer un message Temporisation
 		// toutes les 20 millisecondes
-		demandeTemporisation(vitesse);
+		demandeTemporisation(10);
 		break;
 
 	case Temporisation:
@@ -154,7 +155,7 @@ void gestionEvenement(EvenementGfx evenement)
 		effaceFenetre(0, 0, 0);
 
 		// Affiche le fond étoilé
-		couleurCourante(255,255,255);
+		couleurCourante(255, 255, 255);
 		for (int i = 0; i < nb_etoile - 1; i += 2)
 		{
 			cercle(etoile[i], etoile[i + 1], largeurFenetre() / 1024, 3);
@@ -169,7 +170,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 			InfosBasEcran(Infos);
 		}
-		else if(esc==1)
+		else if (esc == 1)
 		{
 			rafraichisFenetre();
 			bouton_2();
@@ -177,119 +178,124 @@ void gestionEvenement(EvenementGfx evenement)
 			bouton_4();
 			bouton_5();
 		}
-		else{
+		else
+		{
 			rafraichisFenetre();
 			bouton_1();
 			bouton_3();
 			bouton_5();
 		}
 
-		demandeTemporisation(vitesse);
+		demandeTemporisation(10);
 		break;
 	case Clavier:
 		printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
 
 		switch (caractereClavier())
 		{
-			case 'Q': /* Pour sortir quelque peu proprement du programme */
-			case 'q': /* On libere la structure image,
-				c'est plus propre, meme si on va sortir du programme juste apres */
-				free_tab(systeme);
-				termineBoucleEvenements();
-				break;
+		case 'Q': /* Pour sortir quelque peu proprement du programme */
+		case 'q': /* On libere la structure image,
+			c'est plus propre, meme si on va sortir du programme juste apres */
+			free_tab(systeme);
+			termineBoucleEvenements();
+			break;
 
-			case 'F':
-			case 'f':
-				pleinEcran = !pleinEcran; // Changement de mode plein ecran
-				if (pleinEcran)
+		case 'F':
+		case 'f':
+			pleinEcran = !pleinEcran; // Changement de mode plein ecran
+			if (pleinEcran)
+			{
+				modePleinEcran();
+			}
+			else
+			{
+				redimensionneFenetre(LargeurFenetre, HauteurFenetre);
+			}
+			update_etoile();
+			break;
+
+		case ' ':
+			if (pause)
+			{
+				pause = 0;
+
+				// On reprend en rafraichissant l'écran
+				demandeTemporisation(10);
+			}
+			else
+			{
+				pause = 1;
+
+				// On met en pause en ne rafraichissant l'écran
+				demandeTemporisation(-1);
+			}
+
+			break;
+
+		case 'L':
+		case 'l':
+			if (vitesse > 1)
+			{
+				vitesse--;
+				for (int i = 0; i < 10; i++)
 				{
-					modePleinEcran();
+					systeme[i]->vitesse = systeme[i]->vitesse * (coef_vitesse / 100);
 				}
-				else
-				{
-					redimensionneFenetre(LargeurFenetre, HauteurFenetre);
-				}
-				update_etoile();
-				break;
+			}
+			break;
 
-			case ' ':
-				if (pause)
-				{
-					pause = 0;
-
-					//On reprend en rafraichissant l'écran
-					demandeTemporisation(vitesse);
-				}
-				else
-				{
-					pause = 1;
-					
-					//On met en pause en ne rafraichissant l'écran
-					demandeTemporisation(-1);
-				}
-
-				break;
-
-			case 'R':
-			case 'r':
-				//update_etoile();
-				// Configure le systeme pour generer un message Temporisation
-				// toutes les 20 millisecondes (rapide)
-				if(vitesse > 1)
-				{
-					vitesse--;
-				}
-				demandeTemporisation(vitesse);
-				break;
-
-			case 'L':
-			case 'l':
-				// Configure le systeme pour generer un message Temporisation
-				// toutes les 100 millisecondes (lent)
+		case 'R':
+		case 'r':
+			if (vitesse < 500)
+			{
 				vitesse++;
-				demandeTemporisation(vitesse);
-				break;
-
-			case 'M':
-			case 'm':
-				printf("esc %d \n", esc);
-				if (esc == 1 ||esc==2)
+				for (int i = 0; i < 10; i++)
 				{
-					esc = 0;
-
-					// Configure le systeme pour ne plus generer de message Temporisation
-					demandeTemporisation(-1);
+					systeme[i]->vitesse = systeme[i]->vitesse * ((coef_vitesse + 1.6) / 100);
 				}
-				else
-				{
-					esc = 1;
-				}
+			}
+			break;
 
-				break;
-			
-			case '+':
-				// On zoome de 5 %
-				ZoomSystem += 5;
-				zoom_system(systeme, 1.05);
-				break;
+		case 'M':
+		case 'm':
+			printf("esc %d \n", esc);
+			if (esc == 1 || esc == 2)
+			{
+				esc = 0;
 
-			case '-':
-				// On dézoome de 5 %
-				ZoomSystem -= 5;
-				zoom_system(systeme, 0.95);
-				break;
+				// Configure le systeme pour ne plus generer de message Temporisation
+				demandeTemporisation(-1);
+			}
+			else
+			{
+				esc = 1;
+			}
 
-			case 'W':
-			case 'w':
-				// On met le focus sur la planète suivante
-				IndicePlanete++;
-				if(IndicePlanete == 10) // Si on est sur la dernière planete, on revient à la première (ie Soleil)
-				{
-					IndicePlanete = 0;
-				}
-				PlaneteCentrale = systeme[IndicePlanete];
-				update_focus(systeme);
-				break;
+			break;
+
+		case '+':
+			// On zoome de 5 %
+			ZoomSystem += 5;
+			zoom_system(systeme, 1.05);
+			break;
+
+		case '-':
+			// On dézoome de 5 %
+			ZoomSystem -= 5;
+			zoom_system(systeme, 0.95);
+			break;
+
+		case 'W':
+		case 'w':
+			// On met le focus sur la planète suivante
+			IndicePlanete++;
+			if (IndicePlanete == 10) // Si on est sur la dernière planete, on revient à la première (ie Soleil)
+			{
+				IndicePlanete = 0;
+			}
+			PlaneteCentrale = systeme[IndicePlanete];
+			update_focus(systeme);
+			break;
 		}
 		break;
 
@@ -303,16 +309,16 @@ void gestionEvenement(EvenementGfx evenement)
 				vitesse -= 1;
 			}*/
 			// On déplace toutes les planètes vers la droite
-			for(int i = 0 ; i < 10 ; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				systeme[i]->instant.x += 10;
 			}
 			update_etoile();
 			break;
 		case ToucheFlecheDroite:
-			//vitesse += 1;
-			// On déplace la planète centrale vers la gauche
-			for(int i = 0 ; i < 10 ; i++)
+			// vitesse += 1;
+			//  On déplace la planète centrale vers la gauche
+			for (int i = 0; i < 10; i++)
 			{
 				systeme[i]->instant.x -= 10;
 			}
@@ -320,7 +326,7 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 		case ToucheFlecheBas:
 			// On déplace la planète centrale vers le haut
-			for(int i = 0 ; i < 10 ; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				systeme[i]->instant.y += 10;
 			}
@@ -328,7 +334,7 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 		case ToucheFlecheHaut:
 			// On déplace la planète centrale vers le bas
-			for(int i = 0 ; i < 10 ; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				systeme[i]->instant.y -= 10;
 			}
@@ -359,10 +365,9 @@ void gestionEvenement(EvenementGfx evenement)
 					esc = 0;
 				}
 
-
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.43 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.30)
 				{
-					esc=menu_principal(5);
+					esc = menu_principal(5);
 				}
 
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.2 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.11)
@@ -371,16 +376,15 @@ void gestionEvenement(EvenementGfx evenement)
 					menu_principal(4);
 				}
 			}
-			if (esc==2)
+			if (esc == 2)
 			{
 				// rectangle(largeurFenetre()/10,hauteurFenetre()/5,largeurFenetre()/3,hauteurFenetre()/10);
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 3.33 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 2.73)
 				{
-					
-					esc=menu_principal(5);
+
+					esc = menu_principal(5);
 					lecture_defaut(systeme);
 				}
-
 
 				// rectangle(largeurFenetre()/10,0,largeurFenetre()/3,hauteurFenetre()/15);
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.76 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.58)
@@ -396,7 +400,6 @@ void gestionEvenement(EvenementGfx evenement)
 					menu_principal(4);
 				}
 			}
-			
 		}
 		break;
 
@@ -415,8 +418,8 @@ void gestionEvenement(EvenementGfx evenement)
 		// On recalcule le centre de l'écran
 		CentreEcran.x = largeurFenetre() / 2;
 		CentreEcran.y = hauteurFenetre() / 2;
-		//PlaneteCentrale->instant.x = CentreEcran.x;
-		//PlaneteCentrale->instant.y = CentreEcran.y;
+		// PlaneteCentrale->instant.x = CentreEcran.x;
+		// PlaneteCentrale->instant.y = CentreEcran.y;
 		update_etoile();
 		break;
 	}

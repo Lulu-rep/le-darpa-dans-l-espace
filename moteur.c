@@ -113,7 +113,7 @@ void pivot_planete(ASTRE *planete)
         alpha = -alpha;
     }
 
-    alpha = (alpha + planete->vitesse*0.0001);
+    alpha = (alpha + planete->vitesse*0.0000001);
     
 
     //alpha = (alpha * M_PI) / 180;
@@ -197,7 +197,7 @@ void init_system(ASTRE** tab)
     mercure->nom = "Mercure";
     mercure->distance_ref = 58;
     mercure->rayon = 5;
-    mercure->vitesse = 175;
+    mercure->vitesse = 175936;
     mercure->centre_gravite = soleil;
     mercure->instant.x = mercure->centre_gravite->instant.x + mercure->distance_ref;
     mercure->instant.y = mercure->centre_gravite->instant.y + mercure->distance_ref;
@@ -209,7 +209,7 @@ void init_system(ASTRE** tab)
     venus->nom = "Venus";
     venus->distance_ref = 108;
     venus->rayon = 2.5;
-    venus->vitesse = 126/*126062*/;
+    venus->vitesse = 126062;
     venus->centre_gravite = soleil;
     venus->instant.x = venus->centre_gravite->instant.x + venus->distance_ref;
     venus->instant.y = venus->centre_gravite->instant.y + venus->distance_ref;
@@ -221,7 +221,7 @@ void init_system(ASTRE** tab)
     terre->nom = "terre";
     terre->distance_ref = 150;
     terre->rayon = 10;
-    terre->vitesse = 107/*107243*/;
+    terre->vitesse = 107243;
     terre->centre_gravite = soleil;
     terre->instant.x = terre->centre_gravite->instant.x + terre->distance_ref;
     terre->instant.y = terre->centre_gravite->instant.y + terre->distance_ref;
@@ -233,7 +233,7 @@ void init_system(ASTRE** tab)
     mars->nom = "Mars";
     mars->distance_ref = 227;
     mars->rayon = 6;
-    mars->vitesse = 87/*87226*/;
+    mars->vitesse = 87226;
     mars->centre_gravite = soleil;
     mars->instant.x = mars->centre_gravite->instant.x + mars->distance_ref;
     mars->instant.y = mars->centre_gravite->instant.y + mars->distance_ref;
@@ -245,7 +245,7 @@ void init_system(ASTRE** tab)
     jupiter->nom = "jupiter";
     jupiter->distance_ref = 400;
     jupiter->rayon = 35;
-    jupiter->vitesse = 47/*47196*/;
+    jupiter->vitesse = 47196;
     jupiter->centre_gravite = soleil;
     jupiter->instant.x = jupiter->centre_gravite->instant.x + jupiter->distance_ref;
     jupiter->instant.y = jupiter->centre_gravite->instant.y + jupiter->distance_ref;
@@ -257,7 +257,7 @@ void init_system(ASTRE** tab)
     saturne->nom = "Saturne";
     saturne->distance_ref = 500;
     saturne->rayon = 32.5;
-    saturne->vitesse = 34/*34962*/;
+    saturne->vitesse = 34962;
     saturne->centre_gravite = soleil;
     saturne->instant.x = saturne->centre_gravite->instant.x + saturne->distance_ref;
     saturne->instant.y = saturne->centre_gravite->instant.y + saturne->distance_ref;
@@ -268,7 +268,7 @@ void init_system(ASTRE** tab)
     uranus->nom = "Uranus";
     uranus->distance_ref = 600;
     uranus->rayon = 20;
-    uranus->vitesse = 24/*24459*/;
+    uranus->vitesse = 24459;
     uranus->centre_gravite = soleil;
     uranus->instant.x = uranus->centre_gravite->instant.x + uranus->distance_ref;
     uranus->instant.y = uranus->centre_gravite->instant.y + uranus->distance_ref;
@@ -280,7 +280,7 @@ void init_system(ASTRE** tab)
     neptune->nom = "Neptune";
     neptune->distance_ref = 700;
     neptune->rayon = 20;
-    neptune->vitesse = 19/*19566*/;
+    neptune->vitesse = 19566;
     neptune->centre_gravite = soleil;
     neptune->instant.x = neptune->centre_gravite->instant.x + neptune->distance_ref;
     neptune->instant.y = neptune->centre_gravite->instant.y + neptune->distance_ref;
@@ -292,7 +292,7 @@ void init_system(ASTRE** tab)
     lune->nom = "Lune";
     lune->distance_ref = 0.3844;
     lune->rayon = 2.5;
-    lune->vitesse = 10/*3680*/;
+    lune->vitesse = 3680;
     lune->centre_gravite = terre;
     lune->instant.x = lune->centre_gravite->instant.x + lune->distance_ref;
     lune->instant.y = lune->centre_gravite->instant.y + lune->distance_ref;
