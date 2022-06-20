@@ -1,4 +1,7 @@
-prog : Menu_Sauvegarde.o SauvegardeAffichage.o SauvegardeMenu.o sauvegarde.o moteur.o
+prog : Menu_Sauvegarde.o	SauvegardeAffichage.o	SauvegardeMenu.o	sauvegarde.o	moteur.o
+
+	gcc -o prog Menu_Sauvegarde.o SauvegardeAffichage.o SauvegardeMenu.o sauvegarde.o moteur.o
+
 
 Menu_Sauvegarde.o : Menu_Sauvegarde.c
         gcc -o Menu_Sauvegarde.o -c Menu_Sauvegarde.c
@@ -14,4 +17,3 @@ SauvegardeAffichage.o : SauvegardeAffichage.c
         
 SauvegardeMenu.o : SauvegardeMenu.c
         gcc -o SauvegardeMenu.o -c SauvegardeMenu.c
-
