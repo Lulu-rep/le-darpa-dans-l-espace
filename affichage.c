@@ -110,7 +110,7 @@ void gestionEvenement(EvenementGfx evenement)
 		static int IndicePlanete = 0;
 		static int pause = 0;
 		static int esc = 2;
-		nb_etoile = 100 + rand() % 500;
+		nb_etoile = 100 + rand() % 2000;
 		etoile = malloc(sizeof(int) * nb_etoile);
 		update_etoile();
 		/* Le message "Initialisation" est envoye une seule fois, au debut du
@@ -173,6 +173,7 @@ void gestionEvenement(EvenementGfx evenement)
 		{
 			rafraichisFenetre();
 			bouton_2();
+			bouton_3();
 			bouton_4();
 			bouton_5();
 		}
@@ -306,6 +307,7 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				systeme[i]->instant.x += 10;
 			}
+			update_etoile();
 			break;
 		case ToucheFlecheDroite:
 			//vitesse += 1;
@@ -314,6 +316,7 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				systeme[i]->instant.x -= 10;
 			}
+			update_etoile();
 			break;
 		case ToucheFlecheBas:
 			// On déplace la planète centrale vers le haut
@@ -321,6 +324,7 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				systeme[i]->instant.y += 10;
 			}
+			update_etoile();
 			break;
 		case ToucheFlecheHaut:
 			// On déplace la planète centrale vers le bas
@@ -328,6 +332,7 @@ void gestionEvenement(EvenementGfx evenement)
 			{
 				systeme[i]->instant.y -= 10;
 			}
+			update_etoile();
 			break;
 		}
 		break;
@@ -344,6 +349,14 @@ void gestionEvenement(EvenementGfx evenement)
 				{
 
 					menu_principal(2);
+					save(systeme);
+				}
+
+				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.76 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.58)
+				{
+					menu_principal(3);
+					lecture(systeme);
+					esc = 0;
 				}
 
 
@@ -363,7 +376,9 @@ void gestionEvenement(EvenementGfx evenement)
 				// rectangle(largeurFenetre()/10,hauteurFenetre()/5,largeurFenetre()/3,hauteurFenetre()/10);
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 3.33 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 2.73)
 				{
+					
 					esc=menu_principal(5);
+					lecture_defaut(systeme);
 				}
 
 
@@ -371,6 +386,8 @@ void gestionEvenement(EvenementGfx evenement)
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.76 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.58)
 				{
 					menu_principal(3);
+					lecture(systeme);
+					esc = 0;
 				}
 
 				if (abscisseSouris() < 3 * largeurFenetre() / 4 && abscisseSouris() > largeurFenetre() / 4 && ordonneeSouris() < hauteurFenetre() - hauteurFenetre() / 1.2 && ordonneeSouris() > hauteurFenetre() - hauteurFenetre() / 1.11)
@@ -396,10 +413,10 @@ void gestionEvenement(EvenementGfx evenement)
 		printf("Hauteur : %d\n", hauteurFenetre());
 
 		// On recalcule le centre de l'écran
-		CentreEcran.x = LargeurFenetre / 2;
-		CentreEcran.y = HauteurFenetre / 2;
-		PlaneteCentrale->instant.x = CentreEcran.x;
-		PlaneteCentrale->instant.y = CentreEcran.y;
+		CentreEcran.x = largeurFenetre() / 2;
+		CentreEcran.y = hauteurFenetre() / 2;
+		//PlaneteCentrale->instant.x = CentreEcran.x;
+		//PlaneteCentrale->instant.y = CentreEcran.y;
 		update_etoile();
 		break;
 	}

@@ -1,21 +1,8 @@
-/*int main(void);
-{
-    FILE *fic = fopen("sauvegarde.c", "r+");
-    int iteration = 0;
-    
-    if (fic == NULL)
-      exit(1);
-}
+#ifndef SAUVEGARDE_H
+#define SAUVEGARDE_H
+#include "menu.h"
 
-int fic;
-
-for (fic = 0 ; fic <100000 ; fic++)
-{
-  scanf(fic, %d, &iteration);
-  printf("Sauvegarde : %d\n", iteration);
-}
-
-fclose(fic);
-
-return 0;
-}*/
+void save(ASTRE** tab);
+void lecture(ASTRE** tab);
+void lecture_defaut(ASTRE** tab);
+#endif

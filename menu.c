@@ -34,13 +34,14 @@ void quitter(){
 	termineBoucleEvenements();
 }
 void lancer_simul(){
-    printf("On lance la simulation");
+    puts("On lance la simulation");
 }
 void charger(){
-    printf("On charge une simulation passée en fichier");
+    puts("On charge une simulation passée en fichier");
 }
 void sauvegarder(){
-    printf("On save");
+    puts("On save");
+
 }
 int reprendre(){
     return 0;

@@ -6,6 +6,7 @@
 #define AFFICHAGE_H
 #include "moteur.h"
 #include "menu.h"
+#include "sauvegarde.h"
 
 #define LargeurFenetre 1280
 #define HauteurFenetre 720
