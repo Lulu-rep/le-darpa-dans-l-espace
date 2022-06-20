@@ -1,9 +1,3 @@
-#include <stdlib.h> // Pour pouvoir utiliser exit()
-#include <stdio.h> // Pour pouvoir utiliser printf()
-#include <math.h> // Pour pouvoir utiliser sin() et cos()
-#include <time.h>
-#include "sauvegarde.h"
-
 /* Je sais pas si c'est bien mais moi j'ai pensé utiliser une fonction d'ouverture des fichiers
 et après faire une boucle pour les faire sauvegarder toutes les X secondes.*/
 
@@ -29,21 +23,30 @@ fgets(<fichier>, <format>, ...)             : lit du texte formaté
  fputs(<fichier>, <format>, ...)            : ecrire du texte formaté
  
  */
-/*int main(void):
+#include <stdio.h>
+#include <stdlib.h>
 
+int main(int argc, char *argv[])
 {
-    FILE *fic = fopen("nom du fichier à sauvegarder !", "r+");
-    
-    if (fic == NULL)
-            exit(1);
-  fscanf(fic, " /* les différents % que l'on a dans le fichier à sauvegarder */ /* ", texte, &age, &etc):
-  
-  printf(" /* nom de la fonction utiliser (pour un belle affichage !)  : %s\n ou autre, texte ou autre*/ /*");
-  printf(" ainsi de suite"); */
-         
-     /*fclose(fic);
-         
+   	FILE* fichier = NULL;
+
+    	int caractereActuel = 0;
+    	
+    	fichier = fopen("main.c", "r");
+    	
+    	if (fichier != NULL)
+    	{
+    	
+    		// Boucle de lecture des caractères un à un
+    		do
+    		{
+    			caractereActuel = fgetc(fichier); // On lit le caractère
+    			printf("%c", caractereActuel); // On l'affiche
+    		} while (caractereActuel != EOF); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
+ 
+        fclose(fichier);
+    }
+ 
+ 
     return 0;
-         
-         }
-*/    
+}
