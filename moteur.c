@@ -86,40 +86,64 @@ COULEUR define_couleur(COULEUR col)
 
 void pivot_planete(ASTRE *planete)
 {
-    double alpha;
+    static float beta=10;
+    double alpha = 0;
     float x, y;
     
     x = planete->instant.x - planete->centre_gravite->instant.x;
+    if(!strcmp(planete->nom,"Lune"))
+    {
+        printf("x lune = %f \n",x);
+    }
+
     y = planete->instant.y - planete->centre_gravite->instant.y;
     alpha = acos(x / planete->distance_ref);
+    
+    /*
+    if(planete->distance_ref-(planete->distance_ref/100) <=planete->instant.x <=planete->distance_ref+planete->distance_ref/100)
+    {
+        
+        alpha+=0.1;
+    }
+    */
+    
 
     if (planete->instant.y < planete->centre_gravite->instant.y)
     {
         alpha = -alpha;
     }
+
+    alpha = (alpha + planete->vitesse*0.0001);
     
-    alpha = (alpha + planete->vitesse * 0.0001);  
 
     //alpha = (alpha * M_PI) / 180;
     x = cos(alpha) * planete->distance_ref;
     y = sin(alpha) * planete->distance_ref;
 
     // Bidouille si Lune
+    
     if(!strcmp(planete->nom,"Lune"))
     {
-        alpha=30;
-        x = cos(alpha) * planete->distance_ref * 40;
-        y = sin(alpha) * planete->distance_ref * 40;
+        if(beta>360)
+        {
+            beta =0;
+        }
+        beta+=0.1;
+        
+        x = cos(beta) * planete->distance_ref * 40;
+        y = sin(beta) * planete->distance_ref * 40;
     }    
+    
    
     // Bidouille si Soleil
     if(!strcmp(planete->nom,"Soleil"))
     {
         y = 0;
-    } 
+    }
 
     planete->instant.x = x + planete->centre_gravite->instant.x;
     planete->instant.y = y + planete->centre_gravite->instant.y;
+    printf("x = %f,  y= %f nom: %s alpha = %lf\n",planete->instant.x,planete->instant.y,planete->nom,alpha);
 }
 
 ASTRE** init_tab()
@@ -268,7 +292,7 @@ void init_system(ASTRE** tab)
     lune->nom = "Lune";
     lune->distance_ref = 0.3844;
     lune->rayon = 2.5;
-    lune->vitesse = 1/*3680*/;
+    lune->vitesse = 10/*3680*/;
     lune->centre_gravite = terre;
     lune->instant.x = lune->centre_gravite->instant.x + lune->distance_ref;
     lune->instant.y = lune->centre_gravite->instant.y + lune->distance_ref;
@@ -283,8 +307,8 @@ void init_system(ASTRE** tab)
     tab[0]=soleil;
     tab[1]=mercure;
     tab[2]=venus;
-    tab[3]=terre;
-    tab[4]=lune;
+    tab[4]=terre;
+    tab[3]=lune;
     tab[5]=mars;
     tab[6]=jupiter;
     tab[7]=saturne;
