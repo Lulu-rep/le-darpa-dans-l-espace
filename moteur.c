@@ -91,10 +91,10 @@ void pivot_planete(ASTRE *planete)
     float x, y;
     
     x = planete->instant.x - planete->centre_gravite->instant.x;
-    if(!strcmp(planete->nom,"Lune"))
+    /*if(!strcmp(planete->nom,"Lune"))
     {
         printf("x lune = %f \n",x);
-    }
+    }*/
 
     y = planete->instant.y - planete->centre_gravite->instant.y;
     alpha = acos(x / planete->distance_ref);
@@ -143,7 +143,7 @@ void pivot_planete(ASTRE *planete)
 
     planete->instant.x = x + planete->centre_gravite->instant.x;
     planete->instant.y = y + planete->centre_gravite->instant.y;
-    printf("x = %f,  y= %f nom: %s alpha = %lf\n",planete->instant.x,planete->instant.y,planete->nom,alpha);
+    //printf("x = %f,  y= %f nom: %s alpha = %lf\n",planete->instant.x,planete->instant.y,planete->nom,alpha);
 }
 
 ASTRE** init_tab()
