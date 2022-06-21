@@ -326,7 +326,12 @@ void zoom_system(ASTRE** tab, float QuotientZoom)
     for (int i = 0; i < 10; i++)
     {
         tab[i]->distance_ref = tab[i]->distance_ref * QuotientZoom;
-        tab[i]->rayon = tab[i]->rayon * QuotientZoom;
+        if(tab[i]->rayon>1){
+            tab[i]->rayon = tab[i]->rayon * QuotientZoom;
+        }
+        else{
+            tab[i]->rayon=1;
+        }
 
         // Si la planète courante est la planète centrale, on ne change pas ses coordonnées (x,y)
         
